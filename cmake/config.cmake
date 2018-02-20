@@ -56,9 +56,10 @@ set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${CMAKE_CXX_FLAGS_RELEASE} ${CMAKE_CXX_FLAGS
 # library checks:
 if (SHAD_RUNTIME_SYSTEM STREQUAL "TBB")
   message(STATUS "Using Intel Threading Building Blocks (TBB) as backend of the Abstract Runtime API.")
+  find_package(Threads)
   find_package(TBB REQUIRED)
   set(HAVE_TBB 1)
-  set(SHAD_RUNTIME_LIB ${TBB_LIBRARIES})
+  set(SHAD_RUNTIME_LIB ${TBB_LIBRARIES} ${CMAKE_THREAD_LIBS_INIT})
 else()
   message(FATAL_ERROR "${SHAD_RUNTIME_SYSTEM} is not a supported runtime system.")
 endif()
