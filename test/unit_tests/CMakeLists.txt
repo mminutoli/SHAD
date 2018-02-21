@@ -6,7 +6,7 @@ if (CLANG_TIDY_EXE)
     shadtest_main PROPERTIES
     CXX_CLANG_TIDY "${DO_CLANG_TIDY}")
 endif()
-target_link_libraries(shadtest_main runtime ${SHAD_RUNTIME_LIB} ${GTEST_LIBRARIES})
+target_link_libraries(shadtest_main ${GTEST_LIBRARIES} runtime ${SHAD_RUNTIME_LIB})
 
 add_executable(test_gtest_remote_failure gtest_test.cc)
 if (CLANG_TIDY_EXE)
