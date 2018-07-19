@@ -113,12 +113,30 @@ struct cherry_pick_<map_tag, T> {
   }
 };
 
+// accumulate callables
+template <typename T>
+struct std_find_ {
+  template <typename It, typename... Policy>
+  It operator()(It begin, It end, const T &obj) {
+    return std::find(begin, end, obj);
+  }
+};
+
+// min_element callables
+template <typename T>
+struct std_min_element_ {
+  template <typename It, typename... Policy>
+  It operator()(It begin, It end) {
+    return std::min_element(begin, end);
+  }
+};
+
 // template test for checking find over iterators
 template <typename T>
-class FindTest : public ::testing::Test {
+class AlgorithmTests : public ::testing::Test {
  protected:
-  template <typename F, typename... Policy>
-  void run(F &&f, Policy... p) {
+  template <typename F>
+  void find(F &&f) {
     // create the input containers
     auto in = create_container_<tag, T>{}(this->kNumElements);
 
@@ -131,7 +149,7 @@ class FindTest : public ::testing::Test {
 
     // search
     auto obs_found_it = obs_found.begin();
-    for (auto &obj : objs) *obs_found_it++ = f(p..., in.begin(), in.end(), obj);
+    for (auto &obj : objs) *obs_found_it++ = f(in.begin(), in.end(), obj);
 
     // seq-for search
     auto exp_found_it = exp_found.begin();
@@ -150,11 +168,29 @@ class FindTest : public ::testing::Test {
     for (auto &found_entry : obs_found) ASSERT_EQ(found_entry, *exp_found_it++);
   }
 
-  virtual ~FindTest() {}
+  template <typename F>
+  void min_element(F &&f) {
+    // create the input containers
+    auto in = create_container_<tag, T>{}(this->kNumElements);
+
+    // apply
+    auto obs = f(in.begin(), in.end());
+
+    // seq-for reference
+    auto exp = in.begin();
+    for (auto it = in.begin(); it != in.end(); ++it)
+      if (*it < *exp) exp = it;
+
+    // check correctness
+    ASSERT_EQ(obs, exp);
+  }
+
+  virtual ~AlgorithmTests() {}
 
  private:
   using tag = typename ds_tag<T>::type;
   using it_t = typename T::iterator;
+  using it_val_t = typename it_t::value_type;
   static constexpr size_t kNumElements = 1024, num_objs = 128;
 };
 
@@ -164,14 +200,16 @@ class FindTest : public ::testing::Test {
 // todo add SHAD types
 typedef ::testing::Types<std_vector_t, std_unordered_map_t> Types;
 
-TYPED_TEST_CASE(FindTest, Types);
+TYPED_TEST_CASE(AlgorithmTests, Types);
 
-// (sequential) std::find
-TYPED_TEST(FindTest, std_seq) {
-  using it_t = typename TypeParam::iterator;
-  this->run(std::find<it_t, typename it_t::value_type>);
+// (sequential) std
+TYPED_TEST(AlgorithmTests, find) {
+  using it_val_t = typename TypeParam::iterator::value_type;
+  this->find(std_find_<it_val_t>{});
+  this->min_element(std_min_element_<it_val_t>{});
 }
 
-// todo sequential shad::find
-// todo distributed shad::find
-// todo distributed-async shad::find
+// todo std on shad
+// todo sequential shad
+// todo distributed shad
+// todo distributed-async shad

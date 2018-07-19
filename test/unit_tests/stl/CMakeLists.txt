@@ -1,7 +1,8 @@
 set(tests
   iterator
   for
-  find
+  numeric
+  algorithm
 )
 
 foreach(t ${tests})
