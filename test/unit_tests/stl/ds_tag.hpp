@@ -25,8 +25,8 @@
 #ifndef TEST_UNIT_TESTS_STL_DS_TAG_HPP_
 #define TEST_UNIT_TESTS_STL_DS_TAG_HPP_
 
-#include <vector>
 #include <unordered_map>
+#include <vector>
 
 namespace shad_test_stl {
 struct vector_tag {};

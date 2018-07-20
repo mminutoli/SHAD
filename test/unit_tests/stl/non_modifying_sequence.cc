@@ -384,7 +384,7 @@ class SearchNTest : public NonModifyingSequenceTest<T> {
  private:
   template <class ForwardIt, class Size, class T_>
   ForwardIt search_n_(ForwardIt first, ForwardIt last, Size count,
-                     const T_ &value) {
+                      const T_ &value) {
     for (; first != last; ++first) {
       if (!(*first == value)) {
         continue;
