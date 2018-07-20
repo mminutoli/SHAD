@@ -54,14 +54,13 @@ class NumericTest : public ::testing::Test {
 
 template <typename T>
 class AccumulateTest : public NumericTest<T> {
-  using tag = typename ds_tag<T>::type;
   using it_val_t = typename T::iterator::value_type;
 
  protected:
   template <typename F>
   void run(F &&f) {
     // create the input containers
-    auto in = create_container_<tag, T>{}(this->kNumElements);
+    auto in = create_container_<T>(this->kNumElements);
 
     // accumulate
     auto obs = f(in.begin(), in.end(), init_val_<it_val_t>());

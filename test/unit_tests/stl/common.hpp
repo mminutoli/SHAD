@@ -1,4 +1,4 @@
-test/unit_tests/stl/algorithm_wrappers.hpp//===------------------------------------------------------------*- C++ -*-===//
+it_value_t<T>//===------------------------------------------------------------*- C++ -*-===//
 //
 //                                     SHAD
 //
@@ -25,6 +25,7 @@ test/unit_tests/stl/algorithm_wrappers.hpp//===---------------------------------
 #ifndef TEST_UNIT_TESTS_STL_COMMON_HPP_
 #define TEST_UNIT_TESTS_STL_COMMON_HPP_
 
+#include <random>
 #include <unordered_map>
 #include <vector>
 
@@ -53,99 +54,112 @@ typedef ::testing::Types<std_vector_t, std_unordered_map_t> AllTypes;
 typedef ::testing::Types<std_vector_t> VectorTypes;
 // todo add SHADTypes/SHADVectorTypes
 
-// container creation
-template <typename tag, typename T>
-struct create_container_ {
-  T operator()(size_t) {
+// random value generation
+template <typename tag, typename value_t>
+struct random_value_ {
+  value_t operator()(std::mt19937 &rng) {
     assert(false);
-    return T{};
+    return value_t{};
+  }
+};
+
+template <typename value_t>
+struct random_value_<vector_tag, value_t> {
+  value_t operator()(std::mt19937 &rng) {
+    std::uniform_int_distribution<int> dist{-128, 128};
+    return value_t{dist(rng)};
+  }
+};
+
+template <typename value_t>
+struct random_value_<map_tag, value_t> {
+  value_t operator()(std::mt19937 &rng) {
+    std::uniform_int_distribution<int> dist{-128, 128};
+    return value_t{dist(rng), dist(rng)};
+  }
+};
+
+// value insertion
+template <typename tag, typename T>
+struct insert_value_ {
+  void operator()(T &, const typename T::iterator::value_type) {}
+};
+
+template <typename T>
+struct insert_value_<vector_tag, T> {
+  void operator()(T &in, const typename T::iterator::value_type &val) {
+    in.push_back(val);
   }
 };
 
 template <typename T>
-struct create_container_<vector_tag, T> {
-  T operator()(size_t size) {
-    T res;
-    std::mt19937 rng;
-    std::uniform_int_distribution<int> dist{-128, 128};
-    for (auto i = size; i > 0; --i) res.push_back(dist(rng));
-    return res;
+struct insert_value_<map_tag, T> {
+  void operator()(T &in, const typename T::iterator::value_type &val) {
+    in[val.first] = val.second;
   }
 };
 
+// container creation
 template <typename T>
-struct create_container_<map_tag, T> {
-  T operator()(size_t size) {
-    T res;
-    std::mt19937 rng;
-    std::uniform_int_distribution<int> dist{-128, 128};
-    for (auto i = size; i > 0; --i) res[dist(rng)] = dist(rng);
-    return res;
-  }
-};
+T create_container_(size_t size) {
+  using tag = typename ds_tag<T>::type;
+  T res;
+  std::mt19937 rng;
+  for (auto i = size; i > 0; --i)
+    insert_value_<tag, T>{}(res, random_value_<tag, it_value_t<T>>{}(rng));
+  return res;
+}
 
 // random selection from containers
-template <typename tag, typename T>
-struct cherry_pick_ {
-  std::vector<typename T::iterator::value_type> operator()(const T &in) {
-    assert(false);
-    return T{};
-  }
-};
-
 template <typename T>
-struct cherry_pick_<vector_tag, T> {
-  std::vector<vector_it_val_t> operator()(const T &in) {
-    std::vector<vector_it_val_t> res;
-    std::mt19937 rng;
-    std::uniform_int_distribution<int> pick_dist{0, 1};
-    std::uniform_int_distribution<int> poison_dist{-10, 10};
-    for (auto it = in.begin(); it != in.end(); ++it) {
-      if (pick_dist(rng))
-        res.push_back(*it);
-      else
-        res.push_back(vector_it_val_t{poison_dist(rng)});
-    }
-    return res;
+std::vector<it_value_t<T>> cherry_pick_(const T &in) {
+  using tag = typename ds_tag<T>::type;
+  std::vector<it_value_t<T>> res;
+  std::mt19937 rng;
+  std::uniform_int_distribution<int> pick_dist{0, 1};
+  for (auto it = in.begin(); it != in.end(); ++it) {
+    if (pick_dist(rng))
+      res.push_back(*it);
+    else
+      res.push_back(random_value_<tag, it_value_t<T>>{}(rng));
   }
-};
-
-template <typename T>
-struct cherry_pick_<map_tag, T> {
-  std::vector<map_it_val_t> operator()(const T &in) {
-    std::vector<map_it_val_t> res;
-    std::mt19937 rng;
-    std::uniform_int_distribution<int> pick_dist{0, 1};
-    std::uniform_int_distribution<int> poison_dist{-10, 10};
-    for (auto it = in.begin(); it != in.end(); ++it) {
-      if (pick_dist(rng))
-        res.push_back(*it);
-      else
-        res.push_back(map_it_val_t{poison_dist(rng), poison_dist(rng)});
-    }
-    return res;
-  }
-};
-
-template <typename T>
-bool gtz(const T &x) {
-  return x > 0;
+  return res;
 }
+
+// random sub-sequencing from containers
+template <typename T>
+T maybe_subseq_from_(const T &in, size_t start_idx) {
+  using tag = typename ds_tag<T>::type;
+  T res;
+  std::mt19937 rng;
+  std::uniform_int_distribution<int> pick_dist{0, 1};
+  std::uniform_int_distribution<int> continue_dist{0, 10};
+
+  // move to starting point
+  auto first = in.begin();
+  size_t i = 0;
+  while (i++ < start_idx && first != in.end()) ++first;
+
+  while (first != in.end()) {
+    if (!continue_dist(rng)) break;
+    if (pick_dist(rng))
+      insert_value_<tag, T>{}(res, *first);
+    else
+      insert_value_<tag, T>{}(res, random_value_<tag, it_value_t<T>>{}(rng));
+    ++first;
+  }
+  return res;
+}
+
+template <typename T>
+struct is_even {
+  bool operator()(const T &x) { return !(x % 2); }
+};
 
 template <>
-bool gtz<map_it_val_t>(const map_it_val_t &x) {
-  return gtz(x.second);
-}
-
-template <typename T>
-bool even(const T &x) {
-  return !(x % 2);
-}
-
-template <>
-bool even<map_it_val_t>(const map_it_val_t &x) {
-  return even(x.second);
-}
+struct is_even<map_it_val_t> {
+  bool operator()(const map_it_val_t &x) { return is_even<int>{}(x.second); }
+};
 
 template <typename T>
 T sum(const T &x, const T &y) {
