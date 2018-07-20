@@ -32,17 +32,17 @@
 using namespace shad_test_stl;
 
 template <typename T>
-class NonModifyingSequenceTest : public ::testing::Test {
+class AlgorithmTest : public ::testing::Test {
  protected:
   using value_type = it_value_t<T>;
 
-  virtual ~NonModifyingSequenceTest() {}
+  virtual ~AlgorithmTest() {}
   static constexpr size_t kNumElements = 1024, num_objs = 128;
 };
 
 template <typename T>
-class AllOfTest : public NonModifyingSequenceTest<T> {
-  using value_type = typename NonModifyingSequenceTest<T>::value_type;
+class AllOfTest : public AlgorithmTest<T> {
+  using value_type = typename AlgorithmTest<T>::value_type;
 
  protected:
   template <typename F>
@@ -61,8 +61,8 @@ class AllOfTest : public NonModifyingSequenceTest<T> {
 };
 
 template <typename T>
-class AnyOfTest : public NonModifyingSequenceTest<T> {
-  using value_type = typename NonModifyingSequenceTest<T>::value_type;
+class AnyOfTest : public AlgorithmTest<T> {
+  using value_type = typename AlgorithmTest<T>::value_type;
 
  protected:
   template <typename F>
@@ -81,8 +81,8 @@ class AnyOfTest : public NonModifyingSequenceTest<T> {
 };
 
 template <typename T>
-class NoneOfTest : public NonModifyingSequenceTest<T> {
-  using value_type = typename NonModifyingSequenceTest<T>::value_type;
+class NoneOfTest : public AlgorithmTest<T> {
+  using value_type = typename AlgorithmTest<T>::value_type;
 
  protected:
   template <typename F>
@@ -103,7 +103,7 @@ class NoneOfTest : public NonModifyingSequenceTest<T> {
 // todo for_each
 
 template <typename T>
-class CountTest : public NonModifyingSequenceTest<T> {
+class CountTest : public AlgorithmTest<T> {
  protected:
   template <typename F>
   void run(F &&f) {
@@ -132,7 +132,7 @@ class CountTest : public NonModifyingSequenceTest<T> {
 };
 
 template <typename T>
-class MismatchTest : public NonModifyingSequenceTest<T> {
+class MismatchTest : public AlgorithmTest<T> {
  protected:
   template <typename F>
   void run(F &&f) {
@@ -159,7 +159,7 @@ class MismatchTest : public NonModifyingSequenceTest<T> {
 };
 
 template <typename T>
-class FindTest : public NonModifyingSequenceTest<T> {
+class FindTest : public AlgorithmTest<T> {
  protected:
   template <typename F>
   void run(F &&f) {
@@ -186,8 +186,8 @@ class FindTest : public NonModifyingSequenceTest<T> {
 };
 
 template <typename T>
-class FindIfTest : public NonModifyingSequenceTest<T> {
-  using value_type = typename NonModifyingSequenceTest<T>::value_type;
+class FindIfTest : public AlgorithmTest<T> {
+  using value_type = typename AlgorithmTest<T>::value_type;
 
  protected:
   template <typename F>
@@ -211,8 +211,8 @@ class FindIfTest : public NonModifyingSequenceTest<T> {
 };
 
 template <typename T>
-class FindIfNotTest : public NonModifyingSequenceTest<T> {
-  using value_type = typename NonModifyingSequenceTest<T>::value_type;
+class FindIfNotTest : public AlgorithmTest<T> {
+  using value_type = typename AlgorithmTest<T>::value_type;
 
  protected:
   template <typename F>
@@ -236,7 +236,7 @@ class FindIfNotTest : public NonModifyingSequenceTest<T> {
 };
 
 template <typename T>
-class FindEndTest : public NonModifyingSequenceTest<T> {
+class FindEndTest : public AlgorithmTest<T> {
  protected:
   template <typename F>
   void run(F &&f) {
@@ -271,7 +271,7 @@ class FindEndTest : public NonModifyingSequenceTest<T> {
 };
 
 template <typename T>
-class FindFirstOfTest : public NonModifyingSequenceTest<T> {
+class FindFirstOfTest : public AlgorithmTest<T> {
  protected:
   template <typename F>
   void run(F &&f) {
@@ -301,7 +301,7 @@ class FindFirstOfTest : public NonModifyingSequenceTest<T> {
 };
 
 template <typename T>
-class AdjacentFindTest : public NonModifyingSequenceTest<T> {
+class AdjacentFindTest : public AlgorithmTest<T> {
  protected:
   template <typename F>
   void run(F &&f) {
@@ -329,7 +329,7 @@ class AdjacentFindTest : public NonModifyingSequenceTest<T> {
 };
 
 template <typename T>
-class SearchTest : public NonModifyingSequenceTest<T> {
+class SearchTest : public AlgorithmTest<T> {
  protected:
   template <typename F>
   void run(F &&f) {
@@ -365,7 +365,7 @@ class SearchTest : public NonModifyingSequenceTest<T> {
 };
 
 template <typename T>
-class SearchNTest : public NonModifyingSequenceTest<T> {
+class SearchNTest : public AlgorithmTest<T> {
  protected:
   template <typename F>
   void run(F &&f) {
@@ -411,6 +411,60 @@ class SearchNTest : public NonModifyingSequenceTest<T> {
       }
     }
     return last;
+  }
+};
+
+template <typename T>
+class MinElementTest : public AlgorithmTest<T> {
+ protected:
+  template <typename F>
+  void run(F &&f) {
+    auto in = create_container_<T>(this->kNumElements);
+    auto observed = f(in.begin(), in.end());
+    auto expected = min_element_(in.begin(), in.end());
+    ASSERT_EQ(observed, expected);
+  }
+
+ private:
+  template <class ForwardIt>
+  ForwardIt min_element_(ForwardIt first, ForwardIt last) {
+    if (first == last) return last;
+
+    ForwardIt smallest = first;
+    ++first;
+    for (; first != last; ++first) {
+      if (*first < *smallest) {
+        smallest = first;
+      }
+    }
+    return smallest;
+  }
+};
+
+template <typename T>
+class MaxElementTest : public AlgorithmTest<T> {
+ protected:
+  template <typename F>
+  void run(F &&f) {
+    auto in = create_container_<T>(this->kNumElements);
+    auto observed = f(in.begin(), in.end());
+    auto expected = max_element_(in.begin(), in.end());
+    ASSERT_EQ(observed, expected);
+  }
+
+ private:
+  template <class ForwardIt>
+  ForwardIt max_element_(ForwardIt first, ForwardIt last) {
+    if (first == last) return last;
+
+    ForwardIt largest = first;
+    ++first;
+    for (; first != last; ++first) {
+      if (*largest < *first) {
+        largest = first;
+      }
+    }
+    return largest;
   }
 };
 
@@ -477,6 +531,16 @@ TYPED_TEST(SearchTest, std) {
 }
 
 // todo search_n - need correctness fix
+
+TYPED_TEST_CASE(MinElementTest, AllTypes);
+TYPED_TEST(MinElementTest, std) {
+  this->run(std::min_element<it_t<TypeParam>>);
+}
+
+TYPED_TEST_CASE(MaxElementTest, AllTypes);
+TYPED_TEST(MaxElementTest, std) {
+  this->run(std::max_element<it_t<TypeParam>>);
+}
 
 //
 // todo sequential shad

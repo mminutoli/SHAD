@@ -1,7 +1,7 @@
 set(tests
   iterator
   for
-  non_modifying_sequence
+  algorithm
   numeric
 )
 
