@@ -28,7 +28,7 @@
 
 #include "gtest/gtest.h"
 
-#include "common.hpp"
+#include "ds_tag.hpp"
 using namespace shad_test_stl;
 
 // custom hashable type
@@ -168,8 +168,8 @@ class ForTest : public ::testing::Test {
 // run
 //
 // todo add SHAD types
-typedef ::testing::Types<std_vector_t, std_unordered_map_t> Types;
+typedef ::testing::Types<std_vector_t, std_unordered_map_t> AllTypes;
 
-TYPED_TEST_CASE(ForTest, Types);
+TYPED_TEST_CASE(ForTest, AllTypes);
 
 TYPED_TEST(ForTest, For) { this->run(); }

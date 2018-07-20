@@ -1,8 +1,8 @@
 set(tests
   iterator
   for
+  non_modifying_sequence
   numeric
-  algorithm
 )
 
 foreach(t ${tests})

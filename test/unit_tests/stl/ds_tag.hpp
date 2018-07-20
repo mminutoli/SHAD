@@ -22,43 +22,30 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include <type_traits>
-#include <unordered_map>
+#ifndef TEST_UNIT_TESTS_STL_DS_TAG_HPP_
+#define TEST_UNIT_TESTS_STL_DS_TAG_HPP_
+
 #include <vector>
+#include <unordered_map>
 
-#include "gtest/gtest.h"
-
-template <typename T>
-class InputIteratorTest : public ::testing::Test {
- protected:
-  virtual ~InputIteratorTest() {}
-};
+namespace shad_test_stl {
+struct vector_tag {};
+struct map_tag {};
 
 template <typename T>
-using it_type = typename std::iterator_traits<T>::value_type;
-
-template <typename T, typename = void>
-struct is_iterator {
-  const bool value = false;
+struct ds_tag {
+  using type = void;
 };
 
-// todo refine it for specific iterator categories
-template <typename T>
-struct is_iterator<
-    T, typename std::enable_if<!std::is_same<it_type<T>, void>::value>::type> {
-  const bool value = true;
+template <typename U>
+struct ds_tag<std::vector<U>> {
+  using type = vector_tag;
 };
 
-// todo add SHAD types
-using std_vector_t = std::vector<int>;
-using std_unordered_map_t = std::unordered_map<int, int>;
-typedef ::testing::Types<std_vector_t, std_unordered_map_t> AllTypes;
+template <typename... U>
+struct ds_tag<std::unordered_map<U...>> {
+  using type = map_tag;
+};
+}  // namespace shad_test_stl
 
-TYPED_TEST_CASE(InputIteratorTest, AllTypes);
-
-//
-// Check iterators on vector
-//
-TYPED_TEST(InputIteratorTest, Iterator) {
-  ASSERT_TRUE(is_iterator<typename TypeParam::iterator>{}.value);
-}
+#endif
