@@ -28,7 +28,6 @@
 
 #include "gtest/gtest.h"
 
-#include "algorithm_wrappers.hpp"
 #include "common.hpp"
 using namespace shad_test_stl;
 
@@ -42,7 +41,6 @@ class NonModifyingSequenceTest : public ::testing::Test {
 template <typename T>
 class AllOfTest : public NonModifyingSequenceTest<T> {
   using tag = typename ds_tag<T>::type;
-  using it_val_t = typename T::iterator::value_type;
 
  protected:
   template <typename F>
@@ -50,7 +48,7 @@ class AllOfTest : public NonModifyingSequenceTest<T> {
     auto in = create_container_<tag, T>{}(this->kNumElements);
 
     // apply
-    auto observed = f(in.begin(), in.end(), [](it_val_t &x) { return gtz(x); });
+    auto observed = f(in.begin(), in.end(), gtz<it_value_t<T>>);
 
     // seq-for reference
     auto expected = true;
@@ -64,7 +62,6 @@ class AllOfTest : public NonModifyingSequenceTest<T> {
 template <typename T>
 class AnyOfTest : public NonModifyingSequenceTest<T> {
   using tag = typename ds_tag<T>::type;
-  using it_val_t = typename T::iterator::value_type;
 
  protected:
   template <typename F>
@@ -72,7 +69,7 @@ class AnyOfTest : public NonModifyingSequenceTest<T> {
     auto in = create_container_<tag, T>{}(this->kNumElements);
 
     // apply
-    auto observed = f(in.begin(), in.end(), [](it_val_t &x) { return gtz(x); });
+    auto observed = f(in.begin(), in.end(), gtz<it_value_t<T>>);
 
     // seq-for reference
     auto expected = false;
@@ -83,7 +80,6 @@ class AnyOfTest : public NonModifyingSequenceTest<T> {
 template <typename T>
 class NoneOfTest : public NonModifyingSequenceTest<T> {
   using tag = typename ds_tag<T>::type;
-  using it_val_t = typename T::iterator::value_type;
 
  protected:
   template <typename F>
@@ -91,7 +87,7 @@ class NoneOfTest : public NonModifyingSequenceTest<T> {
     auto in = create_container_<tag, T>{}(this->kNumElements);
 
     // apply
-    auto observed = f(in.begin(), in.end(), [](it_val_t &x) { return gtz(x); });
+    auto observed = f(in.begin(), in.end(), gtz<it_value_t<T>>);
 
     // seq-for reference
     auto expected = true;
@@ -99,11 +95,19 @@ class NoneOfTest : public NonModifyingSequenceTest<T> {
   }
 };
 
+// todo for_each
+
+// todo count
+
+// todo mismatch
+
+// todo find_end
+
+// todo find_first_of
+
 template <typename T>
 class FindTest : public NonModifyingSequenceTest<T> {
   using tag = typename ds_tag<T>::type;
-  using it_t = typename T::iterator;
-  using it_val_t = typename it_t::value_type;
 
  protected:
   template <typename F>
@@ -111,7 +115,7 @@ class FindTest : public NonModifyingSequenceTest<T> {
     // create the input containers
     auto in = create_container_<tag, T>{}(this->kNumElements);
     auto objs = cherry_pick_<tag, T>{}(in);
-    std::vector<it_t> observed(this->num_objs), expected(this->num_objs);
+    std::vector<it_t<T>> observed(this->num_objs), expected(this->num_objs);
 
     // search
     auto obs_it = observed.begin();
@@ -135,38 +139,59 @@ class FindTest : public NonModifyingSequenceTest<T> {
   }
 };
 
-//
-// run
-//
-// todo add SHAD types
-typedef ::testing::Types<std_vector_t, std_unordered_map_t> AllTypes;
-typedef ::testing::Types<std_vector_t> VectorTypes;
-typedef ::testing::Types<std_unordered_map_t> MapTypes;
+// todo adjacent_find
 
+// todo search_find
+
+// todo search_n
+
+//
+// std (sequential)
+//
 TYPED_TEST_CASE(AllOfTest, AllTypes);
 TYPED_TEST(AllOfTest, std) {
-  using it_val_t = typename TypeParam::iterator::value_type;
-  this->run(std_all_of_<it_val_t>{});
+  this->run(std::all_of<it_t<TypeParam>, typeof(gtz<it_value_t<TypeParam>>)>);
 }
 
 TYPED_TEST_CASE(AnyOfTest, AllTypes);
 TYPED_TEST(AnyOfTest, std) {
-  using it_val_t = typename TypeParam::iterator::value_type;
-  this->run(std_any_of_<it_val_t>{});
+  this->run(std::any_of<it_t<TypeParam>, typeof(gtz<it_value_t<TypeParam>>)>);
 }
 
 TYPED_TEST_CASE(NoneOfTest, AllTypes);
 TYPED_TEST(NoneOfTest, std) {
-  using it_val_t = typename TypeParam::iterator::value_type;
-  this->run(std_none_of_<it_val_t>{});
+  this->run(std::none_of<it_t<TypeParam>, typeof(gtz<it_value_t<TypeParam>>)>);
 }
+
+// todo for_each
+
+// todo count
+
+// todo mismatch
+
+// todo find_end
+
+// todo find_first_of
 
 TYPED_TEST_CASE(FindTest, AllTypes);
 TYPED_TEST(FindTest, std) {
-  using it_val_t = typename TypeParam::iterator::value_type;
-  this->run(std_find_<it_val_t>{});
+  this->run(std::find<it_t<TypeParam>, it_value_t<TypeParam>>);
 }
 
+// todo adjacent_find
+
+// todo search_find
+
+// todo search_n
+
+//
 // todo sequential shad
+//
+
+//
 // todo distributed shad
+//
+
+//
 // todo distributed-async shad
+//

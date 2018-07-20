@@ -30,7 +30,6 @@
 
 #include "gtest/gtest.h"
 
-#include "algorithm_wrappers.hpp"
 #include "common.hpp"
 using namespace shad_test_stl;
 
@@ -84,8 +83,7 @@ typedef ::testing::Types<std_vector_t> VectorTypes;
 
 TYPED_TEST_CASE(AccumulateTest, VectorTypes);
 TYPED_TEST(AccumulateTest, std) {
-  using it_val_t = typename TypeParam::iterator::value_type;
-  this->run(std_accumulate_<it_val_t>{});
+  this->run(std::accumulate<it_t<TypeParam>, it_value_t<TypeParam>>);
 }
 
 // todo sequential shad

@@ -1,4 +1,4 @@
-//===------------------------------------------------------------*- C++ -*-===//
+test/unit_tests/stl/algorithm_wrappers.hpp//===------------------------------------------------------------*- C++ -*-===//
 //
 //                                     SHAD
 //
@@ -28,9 +28,18 @@
 #include <unordered_map>
 #include <vector>
 
+#include "gtest/gtest.h"
+
 #include "ds_tag.hpp"
 
 namespace shad_test_stl {
+
+// typing utilities
+template <typename T>
+using it_t = typename T::iterator;
+
+template <typename T>
+using it_value_t = typename T::iterator::value_type;
 
 // types for data structures and iterators
 // todo add SHAD types
@@ -39,6 +48,10 @@ using std_unordered_map_t = std::unordered_map<int, int>;
 
 using vector_it_val_t = typename std_vector_t::iterator::value_type;
 using map_it_val_t = typename std_unordered_map_t::iterator::value_type;
+
+typedef ::testing::Types<std_vector_t, std_unordered_map_t> AllTypes;
+typedef ::testing::Types<std_vector_t> VectorTypes;
+// todo add SHADTypes/SHADVectorTypes
 
 // container creation
 template <typename tag, typename T>
@@ -121,7 +134,27 @@ bool gtz(const T &x) {
 
 template <>
 bool gtz<map_it_val_t>(const map_it_val_t &x) {
-  return x.second > 0;
+  return gtz(x.second);
+}
+
+template <typename T>
+bool even(const T &x) {
+  return !(x % 2);
+}
+
+template <>
+bool even<map_it_val_t>(const map_it_val_t &x) {
+  return even(x.second);
+}
+
+template <typename T>
+T sum(const T &x, const T &y) {
+  return x + y;
+}
+
+template <>
+map_it_val_t sum<map_it_val_t>(const map_it_val_t &x, const map_it_val_t &y) {
+  return map_it_val_t{sum(x.first, y.first), sum(x.second, y.second)};
 }
 }  // namespace shad_test_stl
 
