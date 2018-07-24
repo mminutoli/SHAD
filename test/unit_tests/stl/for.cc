@@ -50,17 +50,18 @@ struct hash<wrapped_int> {
 }  // namespace std
 
 // types for data structures and iterators
-// todo add SHAD types
 using std_vector_t = std::vector<wrapped_int>;
 using std_unordered_map_t = std::unordered_map<wrapped_int, wrapped_int>;
 
 using vector_it_val_t = typename std_vector_t::iterator::value_type;
 using map_it_val_t = typename std_unordered_map_t::iterator::value_type;
 
+// todo add SHAD types
+
 // container creation
 template <typename tag, typename T>
 struct create_container_ {
-  T operator()(size_t, int &) {
+  T operator()(size_t, int64_t &) {
     assert(false);
     return T{};
   }
@@ -68,7 +69,7 @@ struct create_container_ {
 
 template <typename T>
 struct create_container_<vector_tag, T> {
-  T operator()(size_t size, int &checksum) {
+  T operator()(size_t size, int64_t &checksum) {
     T res;
     std::mt19937 rng;
     std::uniform_int_distribution<int> dist{-128, 128};
@@ -84,7 +85,7 @@ struct create_container_<vector_tag, T> {
 
 template <typename T>
 struct create_container_<map_tag, T> {
-  T operator()(size_t size, int &checksum) {
+  T operator()(size_t size, int64_t &checksum) {
     T res;
     std::mt19937 rng;
     std::uniform_int_distribution<int> dist{-128, 128};
@@ -123,53 +124,93 @@ struct it_to_int_<map_tag, It> {
 
 // template test for checking sequential for over iterators
 template <typename T>
-class ForTest : public ::testing::Test {
+class ForTestFixture : public ::testing::Test {
  protected:
-  void run() {
-    int exp_checksum, obs_checksum;
-
-    auto v = create_container_<tag, T>{}(this->kNumElements_, exp_checksum);
-
-    // iterate and read
-    obs_checksum = 0;
-    for (auto it = v.begin(); it != v.end(); ++it)
-      obs_checksum += val_to_int_<tag>(*it);
-    ASSERT_EQ(obs_checksum, exp_checksum);
-
-    // const-iterate and read
-    obs_checksum = 0;
-    for (auto it = v.cbegin(); it != v.cend(); ++it)
-      obs_checksum += val_to_int_<tag>(*it);
-    ASSERT_EQ(obs_checksum, exp_checksum);
-
-    // const-iterate and dereference by ->
-    obs_checksum = 0;
-    for (auto it = v.begin(); it != v.end(); ++it)
-      obs_checksum += it_to_int_<tag, it_t>{}(it);
-    ASSERT_EQ(obs_checksum, exp_checksum);
-
-    // const-iterate and dereference by *it++
-    obs_checksum = 0;
-    auto it = v.cbegin();
-    while (it != v.cend())
-      obs_checksum += val_to_int_<typename ds_tag<T>::type>(*it++);
-    ASSERT_EQ(obs_checksum, exp_checksum);
+  void SetUp() {
+    v = create_container_<tag, T>{}(this->kNumElements_, exp_checksum);
   }
 
-  virtual ~ForTest() {}
+ protected:
+  using tag = typename ds_tag<T>::type;
+  static constexpr size_t kNumElements_ = 1024;
+  int64_t exp_checksum;
+  T v;
+};
 
- private:
+template <typename T>
+class IteratorDeref : public ForTestFixture<T> {
+ protected:
+  void run() {
+    int64_t obs_checksum = 0;
+    for (auto it = this->v.begin(); it != this->v.end(); ++it)
+      obs_checksum += val_to_int_<typename ds_tag<T>::type>(*it);
+    ASSERT_EQ(obs_checksum, this->exp_checksum);
+  }
+};
+
+template <typename T>
+class ConstIteratorDeref : public ForTestFixture<T> {
+ protected:
+  void run() {
+    int64_t obs_checksum = 0;
+    for (auto it = this->v.cbegin(); it != this->v.cend(); ++it)
+      obs_checksum += val_to_int_<typename ds_tag<T>::type>(*it);
+    ASSERT_EQ(obs_checksum, this->exp_checksum);
+  }
+};
+
+template <typename T>
+class IteratorArrowDeref : public ForTestFixture<T> {
   using tag = typename ds_tag<T>::type;
   using it_t = typename T::iterator;
-  static constexpr size_t kNumElements_ = 1024;
+
+ protected:
+  void run() {
+    int64_t obs_checksum = 0;
+    for (auto it = this->v.begin(); it != this->v.end(); ++it)
+      obs_checksum += it_to_int_<tag, it_t>{}(it);
+    ASSERT_EQ(obs_checksum, this->exp_checksum);
+  }
 };
+
+template <typename T>
+class ConstIteratorArrowDeref : public ForTestFixture<T> {
+  using tag = typename ds_tag<T>::type;
+  using it_t = typename T::iterator;
+
+ protected:
+  void run() {
+    int64_t obs_checksum = 0;
+    auto it = this->v.cbegin();
+    while (it != this->v.cend())
+      obs_checksum += val_to_int_<typename ds_tag<T>::type>(*it++);
+    ASSERT_EQ(obs_checksum, this->exp_checksum);
+  }
+};
+
+typedef ::testing::Types<std_vector_t, std_unordered_map_t> AllTypes;
+
+// todo add SHADTypes/SHADVectorTypes
 
 //
 // run
 //
-// todo add SHAD types
-typedef ::testing::Types<std_vector_t, std_unordered_map_t> AllTypes;
+TYPED_TEST_CASE(IteratorDeref, AllTypes);
+TYPED_TEST(IteratorDeref, std) {
+  this->run();
+}
 
-TYPED_TEST_CASE(ForTest, AllTypes);
+TYPED_TEST_CASE(ConstIteratorDeref, AllTypes);
+TYPED_TEST(ConstIteratorDeref, std) {
+  this->run();
+}
 
-TYPED_TEST(ForTest, For) { this->run(); }
+TYPED_TEST_CASE(IteratorArrowDeref, AllTypes);
+TYPED_TEST(IteratorArrowDeref, std) {
+  this->run();
+}
+
+TYPED_TEST_CASE(ConstIteratorArrowDeref, AllTypes);
+TYPED_TEST(ConstIteratorArrowDeref, std) {
+  this->run();
+}

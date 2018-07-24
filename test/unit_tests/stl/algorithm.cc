@@ -32,24 +32,28 @@
 using namespace shad_test_stl;
 
 template <typename T>
-class AlgorithmTest : public ::testing::Test {
+class AlgorithmTestFixture : public ::testing::Test {
+ public:
+  void SetUp() { in = create_container_<T>(this->kNumElements); }
+
  protected:
   using value_type = it_value_t<T>;
 
-  virtual ~AlgorithmTest() {}
+  virtual ~AlgorithmTestFixture() {}
   static constexpr size_t kNumElements = 1024, num_objs = 128;
+  T in;
 };
 
 template <typename T>
-class AllOfTest : public AlgorithmTest<T> {
-  using value_type = typename AlgorithmTest<T>::value_type;
+class AllOfTest : public AlgorithmTestFixture<T> {
+  using value_type = typename AlgorithmTestFixture<T>::value_type;
 
  protected:
   template <typename F>
   void run(F &&f) {
-    auto in = create_container_<T>(this->kNumElements);
-    auto observed = f(in.begin(), in.end(), is_even<value_type>{});
-    auto expected = all_of_(in.begin(), in.end(), is_even<value_type>{});
+    auto observed = f(this->in.begin(), this->in.end(), is_even<value_type>{});
+    auto expected =
+        all_of_(this->in.begin(), this->in.end(), is_even<value_type>{});
     ASSERT_EQ(observed, expected);
   }
 
@@ -61,15 +65,15 @@ class AllOfTest : public AlgorithmTest<T> {
 };
 
 template <typename T>
-class AnyOfTest : public AlgorithmTest<T> {
-  using value_type = typename AlgorithmTest<T>::value_type;
+class AnyOfTest : public AlgorithmTestFixture<T> {
+  using value_type = typename AlgorithmTestFixture<T>::value_type;
 
  protected:
   template <typename F>
   void run(F &&f) {
-    auto in = create_container_<T>(this->kNumElements);
-    auto observed = f(in.begin(), in.end(), is_even<value_type>{});
-    auto expected = any_of_(in.begin(), in.end(), is_even<value_type>{});
+    auto observed = f(this->in.begin(), this->in.end(), is_even<value_type>{});
+    auto expected =
+        any_of_(this->in.begin(), this->in.end(), is_even<value_type>{});
     ASSERT_EQ(observed, expected);
   }
 
@@ -81,15 +85,15 @@ class AnyOfTest : public AlgorithmTest<T> {
 };
 
 template <typename T>
-class NoneOfTest : public AlgorithmTest<T> {
-  using value_type = typename AlgorithmTest<T>::value_type;
+class NoneOfTest : public AlgorithmTestFixture<T> {
+  using value_type = typename AlgorithmTestFixture<T>::value_type;
 
  protected:
   template <typename F>
   void run(F &&f) {
-    auto in = create_container_<T>(this->kNumElements);
-    auto observed = f(in.begin(), in.end(), is_even<value_type>{});
-    auto expected = none_of_(in.begin(), in.end(), is_even<value_type>{});
+    auto observed = f(this->in.begin(), this->in.end(), is_even<value_type>{});
+    auto expected =
+        none_of_(this->in.begin(), this->in.end(), is_even<value_type>{});
     ASSERT_EQ(observed, expected);
   }
 
@@ -103,16 +107,15 @@ class NoneOfTest : public AlgorithmTest<T> {
 // todo for_each
 
 template <typename T>
-class CountTest : public AlgorithmTest<T> {
+class CountTest : public AlgorithmTestFixture<T> {
  protected:
   template <typename F>
   void run(F &&f) {
-    auto in = create_container_<T>(this->kNumElements);
-    auto objs = cherry_pick_(in);
+    auto objs = cherry_pick_(this->in);
 
     for (auto &obj : objs) {
-      auto observed = f(in.begin(), in.end(), obj);
-      auto expected = count_(in.begin(), in.end(), obj);
+      auto observed = f(this->in.begin(), this->in.end(), obj);
+      auto expected = count_(this->in.begin(), this->in.end(), obj);
       ASSERT_EQ(observed, expected);
     }
   }
@@ -132,17 +135,15 @@ class CountTest : public AlgorithmTest<T> {
 };
 
 template <typename T>
-class MismatchTest : public AlgorithmTest<T> {
+class MismatchTest : public AlgorithmTestFixture<T> {
  protected:
   template <typename F>
   void run(F &&f) {
-    auto in = create_container_<T>(this->kNumElements);
-
     for (size_t i = 0; i < this->num_objs; ++i) {
-      auto s = maybe_subseq_from_(in, i);
+      auto s = maybe_subseq_from_(this->in, i);
 
-      auto observed = f(in.begin(), in.end(), s.begin());
-      auto expected = mismatch_(in.begin(), in.end(), s.begin());
+      auto observed = f(this->in.begin(), this->in.end(), s.begin());
+      auto expected = mismatch_(this->in.begin(), this->in.end(), s.begin());
       ASSERT_EQ(observed, expected);
     }
   }
@@ -159,16 +160,15 @@ class MismatchTest : public AlgorithmTest<T> {
 };
 
 template <typename T>
-class FindTest : public AlgorithmTest<T> {
+class FindTest : public AlgorithmTestFixture<T> {
  protected:
   template <typename F>
   void run(F &&f) {
-    auto in = create_container_<T>(this->kNumElements);
-    auto objs = cherry_pick_(in);
+    auto objs = cherry_pick_(this->in);
 
     for (auto &obj : objs) {
-      auto observed = f(in.begin(), in.end(), obj);
-      auto expected = find_(in.begin(), in.end(), obj);
+      auto observed = f(this->in.begin(), this->in.end(), obj);
+      auto expected = find_(this->in.begin(), this->in.end(), obj);
       ASSERT_EQ(observed, expected);
     }
   }
@@ -186,15 +186,15 @@ class FindTest : public AlgorithmTest<T> {
 };
 
 template <typename T>
-class FindIfTest : public AlgorithmTest<T> {
-  using value_type = typename AlgorithmTest<T>::value_type;
+class FindIfTest : public AlgorithmTestFixture<T> {
+  using value_type = typename AlgorithmTestFixture<T>::value_type;
 
  protected:
   template <typename F>
   void run(F &&f) {
-    auto in = create_container_<T>(this->kNumElements);
-    auto observed = f(in.begin(), in.end(), is_even<value_type>{});
-    auto expected = find_if_(in.begin(), in.end(), is_even<value_type>{});
+    auto observed = f(this->in.begin(), this->in.end(), is_even<value_type>{});
+    auto expected =
+        find_if_(this->in.begin(), this->in.end(), is_even<value_type>{});
     ASSERT_EQ(observed, expected);
   }
 
@@ -211,15 +211,15 @@ class FindIfTest : public AlgorithmTest<T> {
 };
 
 template <typename T>
-class FindIfNotTest : public AlgorithmTest<T> {
-  using value_type = typename AlgorithmTest<T>::value_type;
+class FindIfNotTest : public AlgorithmTestFixture<T> {
+  using value_type = typename AlgorithmTestFixture<T>::value_type;
 
  protected:
   template <typename F>
   void run(F &&f) {
-    auto in = create_container_<T>(this->kNumElements);
-    auto observed = f(in.begin(), in.end(), is_even<value_type>{});
-    auto expected = find_if_not_(in.begin(), in.end(), is_even<value_type>{});
+    auto observed = f(this->in.begin(), this->in.end(), is_even<value_type>{});
+    auto expected =
+        find_if_not_(this->in.begin(), this->in.end(), is_even<value_type>{});
     ASSERT_EQ(observed, expected);
   }
 
@@ -236,16 +236,15 @@ class FindIfNotTest : public AlgorithmTest<T> {
 };
 
 template <typename T>
-class FindEndTest : public AlgorithmTest<T> {
+class FindEndTest : public AlgorithmTestFixture<T> {
  protected:
   template <typename F>
   void run(F &&f) {
-    auto in = create_container_<T>(this->kNumElements);
-
     for (size_t i = 0; i < this->num_objs; ++i) {
-      auto s = maybe_subseq_from_(in, i);
-      auto observed = f(in.begin(), in.end(), s.begin(), s.end());
-      auto expected = find_end_(in.begin(), in.end(), s.begin(), s.end());
+      auto s = maybe_subseq_from_(this->in, i);
+      auto observed = f(this->in.begin(), this->in.end(), s.begin(), s.end());
+      auto expected =
+          find_end_(this->in.begin(), this->in.end(), s.begin(), s.end());
       ASSERT_EQ(observed, expected);
     }
   }
@@ -271,16 +270,15 @@ class FindEndTest : public AlgorithmTest<T> {
 };
 
 template <typename T>
-class FindFirstOfTest : public AlgorithmTest<T> {
+class FindFirstOfTest : public AlgorithmTestFixture<T> {
  protected:
   template <typename F>
   void run(F &&f) {
-    auto in = create_container_<T>(this->kNumElements);
-
     for (size_t i = 0; i < this->num_objs; ++i) {
-      auto s = maybe_subseq_from_(in, i);
-      auto observed = f(in.begin(), in.end(), s.begin(), s.end());
-      auto expected = find_first_of_(in.begin(), in.end(), s.begin(), s.end());
+      auto s = maybe_subseq_from_(this->in, i);
+      auto observed = f(this->in.begin(), this->in.end(), s.begin(), s.end());
+      auto expected =
+          find_first_of_(this->in.begin(), this->in.end(), s.begin(), s.end());
       ASSERT_EQ(observed, expected);
     }
   }
@@ -301,13 +299,12 @@ class FindFirstOfTest : public AlgorithmTest<T> {
 };
 
 template <typename T>
-class AdjacentFindTest : public AlgorithmTest<T> {
+class AdjacentFindTest : public AlgorithmTestFixture<T> {
  protected:
   template <typename F>
   void run(F &&f) {
-    auto in = create_container_<T>(this->kNumElements);
-    auto observed = f(in.begin(), in.end());
-    auto expected = adjacent_find_(in.begin(), in.end());
+    auto observed = f(this->in.begin(), this->in.end());
+    auto expected = adjacent_find_(this->in.begin(), this->in.end());
     ASSERT_EQ(observed, expected);
   }
 
@@ -329,16 +326,15 @@ class AdjacentFindTest : public AlgorithmTest<T> {
 };
 
 template <typename T>
-class SearchTest : public AlgorithmTest<T> {
+class SearchTest : public AlgorithmTestFixture<T> {
  protected:
   template <typename F>
   void run(F &&f) {
-    auto in = create_container_<T>(this->kNumElements);
-
     for (size_t i = 0; i < this->num_objs; ++i) {
-      auto s = maybe_subseq_from_(in, i);
-      auto observed = f(in.begin(), in.end(), s.begin(), s.end());
-      auto expected = search_(in.begin(), in.end(), s.begin(), s.end());
+      auto s = maybe_subseq_from_(this->in, i);
+      auto observed = f(this->in.begin(), this->in.end(), s.begin(), s.end());
+      auto expected =
+          search_(this->in.begin(), this->in.end(), s.begin(), s.end());
       ASSERT_EQ(observed, expected);
     }
   }
@@ -365,17 +361,16 @@ class SearchTest : public AlgorithmTest<T> {
 };
 
 template <typename T>
-class SearchNTest : public AlgorithmTest<T> {
+class SearchNTest : public AlgorithmTestFixture<T> {
  protected:
   template <typename F>
   void run(F &&f) {
-    auto in = create_container_<T>(this->kNumElements);
-    auto objs = cherry_pick_(in);
+    auto objs = cherry_pick_(this->in);
 
     for (auto &obj : objs) {
       for (size_t i = 0; i < 4; ++i) {
-        auto observed = f(in.begin(), in.end(), i, obj);
-        auto expected = search_n_(in.begin(), in.end(), i, obj);
+        auto observed = f(this->in.begin(), this->in.end(), i, obj);
+        auto expected = search_n_(this->in.begin(), this->in.end(), i, obj);
         ASSERT_EQ(observed, expected);
       }
     }
@@ -415,13 +410,12 @@ class SearchNTest : public AlgorithmTest<T> {
 };
 
 template <typename T>
-class MinElementTest : public AlgorithmTest<T> {
+class MinElementTest : public AlgorithmTestFixture<T> {
  protected:
   template <typename F>
   void run(F &&f) {
-    auto in = create_container_<T>(this->kNumElements);
-    auto observed = f(in.begin(), in.end());
-    auto expected = min_element_(in.begin(), in.end());
+    auto observed = f(this->in.begin(), this->in.end());
+    auto expected = min_element_(this->in.begin(), this->in.end());
     ASSERT_EQ(observed, expected);
   }
 
@@ -442,13 +436,12 @@ class MinElementTest : public AlgorithmTest<T> {
 };
 
 template <typename T>
-class MaxElementTest : public AlgorithmTest<T> {
+class MaxElementTest : public AlgorithmTestFixture<T> {
  protected:
   template <typename F>
   void run(F &&f) {
-    auto in = create_container_<T>(this->kNumElements);
-    auto observed = f(in.begin(), in.end());
-    auto expected = max_element_(in.begin(), in.end());
+    auto observed = f(this->in.begin(), this->in.end());
+    auto expected = max_element_(this->in.begin(), this->in.end());
     ASSERT_EQ(observed, expected);
   }
 

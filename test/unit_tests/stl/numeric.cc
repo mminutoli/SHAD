@@ -46,28 +46,29 @@ map_it_val_t init_val_<map_it_val_t>() {
 
 // template test for checking find over iterators
 template <typename T>
-class NumericTest : public ::testing::Test {
+class NumericTestFixture : public ::testing::Test {
+ public:
+  void SetUp() { in = create_container_<T>(this->kNumElements); }
+
  protected:
-  virtual ~NumericTest() {}
+  virtual ~NumericTestFixture() {}
   static constexpr size_t kNumElements = 1024;
+  T in;
 };
 
 template <typename T>
-class AccumulateTest : public NumericTest<T> {
+class AccumulateTest : public NumericTestFixture<T> {
   using it_val_t = typename T::iterator::value_type;
 
  protected:
   template <typename F>
   void run(F &&f) {
-    // create the input containers
-    auto in = create_container_<T>(this->kNumElements);
-
     // accumulate
-    auto obs = f(in.begin(), in.end(), init_val_<it_val_t>());
+    auto obs = f(this->in.begin(), this->in.end(), init_val_<it_val_t>());
 
     // seq-for accumulation
     auto exp = init_val_<it_val_t>();
-    for (auto &x : in) exp += x;
+    for (auto &x : this->in) exp += x;
 
     // check correctness
     ASSERT_EQ(obs, exp);
