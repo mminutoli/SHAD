@@ -1,6 +1,6 @@
 # See README.md for instruction on how to build SHAD with CMake
 
-cmake_minimum_required(VERSION 2.8.12)
+cmake_minimum_required(VERSION 3.1)
 
 if (NOT DEFINED SHAD_VERSION_MAJOR)
   set(SHAD_VERSION_MAJOR 0)

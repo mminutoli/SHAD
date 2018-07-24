@@ -58,20 +58,44 @@ class NumericTestFixture : public ::testing::Test {
 
 template <typename T>
 class AccumulateTest : public NumericTestFixture<T> {
-  using it_val_t = typename T::iterator::value_type;
-
  protected:
   template <typename F>
   void run(F &&f) {
-    // accumulate
-    auto obs = f(this->in.begin(), this->in.end(), init_val_<it_val_t>());
-
-    // seq-for accumulation
-    auto exp = init_val_<it_val_t>();
-    for (auto &x : this->in) exp += x;
-
-    // check correctness
+    auto init_val = init_val_<typename T::iterator::value_type>();
+    auto obs = f(this->in.begin(), this->in.end(), init_val);
+    auto exp = accumulate_(this->in.begin(), this->in.end(), init_val);
     ASSERT_EQ(obs, exp);
+  }
+
+ private:
+  template <class InputIt, class T_>
+  T_ accumulate_(InputIt first, InputIt last, T_ init) {
+    for (; first != last; ++first) {
+      init = std::move(init) + *first;
+    }
+    return init;
+  }
+};
+
+template <typename T>
+class ReduceTest : public NumericTestFixture<T> {
+ protected:
+  template <typename F>
+  void run(F &&f) {
+    auto obs = f(this->in.begin(), this->in.end());
+    auto exp = reduce_(this->in.begin(), this->in.end());
+    ASSERT_EQ(obs, exp);
+  }
+
+ private:
+  template <class InputIt>
+  typename T::iterator::value_type reduce_(InputIt first, InputIt last) {
+    assert(first != last);
+    auto init = *first++;
+    for (; first != last; ++first) {
+      init = std::move(init) + *first;
+    }
+    return init;
   }
 };
 
@@ -84,6 +108,11 @@ typedef ::testing::Types<std_vector_t> VectorTypes;
 TYPED_TEST_CASE(AccumulateTest, VectorTypes);
 TYPED_TEST(AccumulateTest, std) {
   this->run(std::accumulate<it_t<TypeParam>, it_value_t<TypeParam>>);
+}
+
+TYPED_TEST_CASE(ReduceTest, VectorTypes);
+TYPED_TEST(ReduceTest, std) {
+  this->run(std::reduce<it_t<TypeParam>>);
 }
 
 // todo sequential shad
