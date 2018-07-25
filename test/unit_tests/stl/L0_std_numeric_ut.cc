@@ -22,36 +22,36 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef TEST_UNIT_TESTS_STL_DS_TAG_HPP_
-#define TEST_UNIT_TESTS_STL_DS_TAG_HPP_
+#include <numeric>
 
-#include <unordered_map>
-#include <vector>
+#include "gtest/gtest.h"
 
-namespace shad_test_stl {
-struct vector_tag {};
-struct map_tag {};
-struct set_tag {};
+#include "common.hpp"
+#include "stl_emulation/numeric.hpp"
+using namespace shad_test_stl;
 
-template <typename T>
-struct ds_tag {
-  using type = void;
-};
+typedef ::testing::Types<std_vector_t> TestTypes;
+TYPED_TEST_CASE(TestFixture, TestTypes);
 
-template <typename U>
-struct ds_tag<std::vector<U>> {
-  using type = vector_tag;
-};
+///////////////////////////////////////
+//
+// accumulate
+//
+///////////////////////////////////////
+TYPED_TEST(TestFixture, std_accumulate) {
+  using it_t = typeof(this->in.begin());
+  using val_t = it_value_t<TypeParam>;
+  this->test(std::accumulate<it_t, val_t>, accumulate_<it_t, val_t>,
+             make_val<val_t>(0));
+}
 
-template <typename... U>
-struct ds_tag<std::unordered_map<U...>> {
-  using type = map_tag;
-};
-
-template <typename U>
-struct ds_tag<std::set<U>> {
-  using type = set_tag;
-};
-}  // namespace shad_test_stl
-
-#endif
+///////////////////////////////////////
+//
+// reduce
+//
+///////////////////////////////////////
+TYPED_TEST(TestFixture, std_reduce) {
+  using it_t = typeof(this->in.begin());
+  using val_t = it_value_t<TypeParam>;
+  this->test(std::reduce<it_t>, reduce_<it_t>);
+}

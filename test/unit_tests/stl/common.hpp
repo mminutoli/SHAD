@@ -25,7 +25,6 @@
 #ifndef TEST_UNIT_TESTS_STL_COMMON_HPP_
 #define TEST_UNIT_TESTS_STL_COMMON_HPP_
 
-#include <random>
 #include <unordered_map>
 #include <vector>
 
@@ -50,34 +49,27 @@ using std_unordered_map_t = std::unordered_map<int, int>;
 using vector_it_val_t = typename std_vector_t::iterator::value_type;
 using map_it_val_t = typename std_unordered_map_t::iterator::value_type;
 
-typedef ::testing::Types<std_vector_t, std_unordered_map_t> AllTypes;
-typedef ::testing::Types<std_vector_t> VectorTypes;
-// todo add SHADTypes/SHADVectorTypes
+// dereferencing
+template <typename val_t>
+int val_to_int_(const val_t &v) {
+  return v;
+}
 
-// random value generation
-template <typename tag, typename value_t>
-struct random_value_ {
-  value_t operator()(std::mt19937 &rng) {
-    assert(false);
-    return value_t{};
-  }
+template <>
+int val_to_int_<map_it_val_t>(const map_it_val_t &v) {
+  return v.first + v.second;
+}
+
+// value creation
+template <typename T>
+T make_val(int v) {
+  return v;
 };
 
-template <typename value_t>
-struct random_value_<vector_tag, value_t> {
-  value_t operator()(std::mt19937 &rng) {
-    std::uniform_int_distribution<int> dist{-128, 128};
-    return value_t{dist(rng)};
-  }
-};
-
-template <typename value_t>
-struct random_value_<map_tag, value_t> {
-  value_t operator()(std::mt19937 &rng) {
-    std::uniform_int_distribution<int> dist{-128, 128};
-    return value_t{dist(rng), dist(rng)};
-  }
-};
+template <>
+map_it_val_t make_val<map_it_val_t>(int v) {
+  return map_it_val_t{v, v};
+}
 
 // value insertion
 template <typename tag, typename T>
@@ -99,55 +91,46 @@ struct insert_value_<map_tag, T> {
   }
 };
 
-// container creation
+// container creation and expected checksum
 template <typename T>
-T create_container_(size_t size) {
+T create_container_(size_t size, bool even = true) {
   using tag = typename ds_tag<T>::type;
   T res;
-  std::mt19937 rng;
   for (auto i = size; i > 0; --i)
-    insert_value_<tag, T>{}(res, random_value_<tag, it_value_t<T>>{}(rng));
+    insert_value_<tag, T>{}(res, make_val<it_value_t<T>>(2 * i + !even));
   return res;
 }
 
-// random selection from containers
 template <typename T>
-std::vector<it_value_t<T>> cherry_pick_(const T &in) {
+int expected_checksum(size_t size, bool even = true) {
   using tag = typename ds_tag<T>::type;
-  std::vector<it_value_t<T>> res;
-  std::mt19937 rng;
-  std::uniform_int_distribution<int> pick_dist{0, 1};
-  for (auto it = in.begin(); it != in.end(); ++it) {
-    if (pick_dist(rng))
-      res.push_back(*it);
-    else
-      res.push_back(random_value_<tag, it_value_t<T>>{}(rng));
-  }
+  int res = 0;
+  for (auto i = size; i > 0; --i)
+    res += val_to_int_(make_val<it_value_t<T>>(2 * i + !even));
   return res;
 }
 
-// random sub-sequencing from containers
+// sub-sequencing from containers
 template <typename T>
-T maybe_subseq_from_(const T &in, size_t start_idx) {
-  using tag = typename ds_tag<T>::type;
+T subseq_from_(const T &in, size_t start_idx, size_t len) {
   T res;
-  std::mt19937 rng;
-  std::uniform_int_distribution<int> pick_dist{0, 1};
-  std::uniform_int_distribution<int> continue_dist{0, 10};
+  using tag = typename ds_tag<T>::type;
 
   // move to starting point
   auto first = in.begin();
   size_t i = 0;
-  while (i++ < start_idx && first != in.end()) ++first;
-
-  while (first != in.end()) {
-    if (!continue_dist(rng)) break;
-    if (pick_dist(rng))
-      insert_value_<tag, T>{}(res, *first);
-    else
-      insert_value_<tag, T>{}(res, random_value_<tag, it_value_t<T>>{}(rng));
+  while (i++ < start_idx && first != in.end()) {
+    assert(first != in.end());
     ++first;
   }
+
+  // fill
+  for (i = 0; i < len; ++i) {
+    assert(first != in.end());
+    insert_value_<tag, T>{}(res, *first);
+    ++first;
+  }
+
   return res;
 }
 
@@ -162,14 +145,28 @@ struct is_even<map_it_val_t> {
 };
 
 template <typename T>
-T sum(const T &x, const T &y) {
-  return x + y;
-}
+struct is_odd {
+  bool operator()(const T &x) { return !(is_even<T>{}(x)); }
+};
 
-template <>
-map_it_val_t sum<map_it_val_t>(const map_it_val_t &x, const map_it_val_t &y) {
-  return map_it_val_t{sum(x.first, y.first), sum(x.second, y.second)};
-}
+// test fixture
+template <typename T>
+class TestFixture : public ::testing::Test {
+ public:
+  void SetUp() { in = create_container_<T>(this->kNumElements); }
+
+  template <typename F, typename... args_>
+  void test(F &&sub_f, F &&obj_f, args_... args) {
+    auto obs = sub_f(in.begin(), in.end(), args...);
+    auto exp = obj_f(in.begin(), in.end(), args...);
+    ASSERT_EQ(obs, exp);
+  }
+
+ protected:
+  virtual ~TestFixture() {}
+  static constexpr size_t kNumElements = 1024;
+  T in;
+};
 }  // namespace shad_test_stl
 
 #endif

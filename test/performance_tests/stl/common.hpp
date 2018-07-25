@@ -33,80 +33,120 @@
 
 namespace shad_test_stl {
 
-// benchmark registration utilities
-constexpr uint32_t BENCHMARK_MIN_SIZE = 1024;
-constexpr uint32_t BENCHMARK_MAX_SIZE = 64 << 20;
-
 // typing utilities
 template <typename T>
 using it_t = typename T::iterator;
+
+template <typename T>
+using output_it_t = typename T::output_iterator;
 
 template <typename T>
 using it_value_t = typename T::iterator::value_type;
 
 // types for data structures and iterators
 // todo add SHAD types
-using std_vector_t = std::vector<int>;
-using std_unordered_map_t = std::unordered_map<int, int>;
+using std_vector_t = std::vector<uint64_t>;
+using std_unordered_map_t = std::unordered_map<uint64_t, uint64_t>;
+using std_set_t = std::set<uint64_t>;
 
 using vector_it_val_t = typename std_vector_t::iterator::value_type;
 using map_it_val_t = typename std_unordered_map_t::iterator::value_type;
+using set_it_val_t = typename std_set_t::iterator::value_type;
 
-// random value generation
-template <typename tag, typename value_t>
-struct random_value_ {
-  value_t operator()(std::mt19937 &rng) {
-    assert(false);
-    return value_t{};
-  }
-};
-
-template <typename value_t>
-struct random_value_<vector_tag, value_t> {
-  value_t operator()(std::mt19937 &rng) {
-    std::uniform_int_distribution<int> dist{-128, 128};
-    return value_t{dist(rng)};
-  }
-};
-
-template <typename value_t>
-struct random_value_<map_tag, value_t> {
-  value_t operator()(std::mt19937 &rng) {
-    std::uniform_int_distribution<int> dist{-128, 128};
-    return value_t{dist(rng), dist(rng)};
-  }
-};
-
-// value insertion
-template <typename tag, typename T>
-struct insert_value_ {
-  void operator()(T &, const typename T::iterator::value_type) {}
-};
-
-template <typename T>
-struct insert_value_<vector_tag, T> {
-  void operator()(T &in, const typename T::iterator::value_type &val) {
-    in.push_back(val);
+// all-even container creation
+template <typename T, typename tag_t>
+struct create_container__ {
+  T operator()(uint64_t size) {
+    T res;
+    for (uint64_t i = 0; i < size; ++i) res.push_back(i);
+    return res;
   }
 };
 
 template <typename T>
-struct insert_value_<map_tag, T> {
-  void operator()(T &in, const typename T::iterator::value_type &val) {
-    in[val.first] = val.second;
+struct create_container__<T, map_tag> {
+  T operator()(uint64_t size) {
+    T res;
+    for (uint64_t i = 0; i < size; ++i) res[i] = i;
+    return res;
   }
 };
 
-// container creation
 template <typename T>
-T create_container_(size_t size) {
-  using tag = typename ds_tag<T>::type;
-  T res;
-  std::mt19937 rng;
-  for (auto i = size; i > 0; --i)
-    insert_value_<tag, T>{}(res, random_value_<tag, it_value_t<T>>{}(rng));
-  return res;
+struct create_container__<T, set_tag> {
+  T operator()(uint64_t size) {
+    T res;
+    for (uint64_t i = 0; i < size; ++i) res.insert(i * 4);
+    return res;
+  }
+};
+
+template <typename T>
+T create_container_(uint64_t size) {
+  return create_container__<T, typename ds_tag<T>::type>{}(size);
 }
+
+// even/odd test
+template <typename T>
+struct is_even {
+  bool operator()(const T &x) { return !(x % 2); }
+};
+
+template <>
+struct is_even<map_it_val_t> {
+  bool operator()(const map_it_val_t &x) {
+    return is_even<uint64_t>{}(x.second);
+  }
+};
+
+template <typename T>
+struct is_odd {
+  bool operator()(const T &x) { return !(is_even<T>{}(x)); }
+};
+
+// add 2
+template <typename T>
+struct add_two {
+  bool operator()(const T &x) { return x + 2; }
+};
+
+template <>
+struct add_two<map_it_val_t> {
+  bool operator()(const map_it_val_t &x) {
+    return add_two<uint64_t>{}(x.second);
+  }
+};
+
+// benchmark registration utilities
+constexpr uint64_t BENCHMARK_MIN_SIZE = 1024;
+constexpr uint64_t BENCHMARK_MAX_SIZE = 64 << 20;
+constexpr uint64_t BENCHMARK_SIZE_MULTIPLIER = 4;
+
+template <typename T>
+class PerfTestFixture : public benchmark::Fixture {
+ public:
+  template <typename F, typename... args_>
+  void run(benchmark::State &state, F &&f, args_... args) {
+    auto in = create_container_<T>(state.range(0));
+    for (auto _ : state) f(in.begin(), in.end(), args...);
+  }
+
+  template <typename F, typename... args_>
+  void run_io(benchmark::State &state, F &&f, args_... args) {
+    auto in = create_container_<T>(state.range(0));
+    auto out = create_container_<T>(state.range(0));
+    for (auto _ : state) f(in.begin(), in.end(), out.begin(), args...);
+  }
+};
+
+#define BENCHMARK_TEMPLATE_DEFINE_F_(x, y)           \
+  BENCHMARK_TEMPLATE_DEFINE_F(PerfTestFixture, x, y) \
+  (benchmark::State & st)
+
+#define BENCHMARK_REGISTER_F_(x)                   \
+  BENCHMARK_REGISTER_F(PerfTestFixture, x)         \
+      ->RangeMultiplier(BENCHMARK_SIZE_MULTIPLIER) \
+      ->Range(BENCHMARK_MIN_SIZE, BENCHMARK_MAX_SIZE);
 }  // namespace shad_test_stl
 
 #endif

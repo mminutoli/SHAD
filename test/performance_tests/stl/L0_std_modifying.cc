@@ -22,36 +22,45 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef TEST_UNIT_TESTS_STL_DS_TAG_HPP_
-#define TEST_UNIT_TESTS_STL_DS_TAG_HPP_
+#include <algorithm>
 
-#include <unordered_map>
-#include <vector>
+#include <benchmark/benchmark.h>
 
-namespace shad_test_stl {
-struct vector_tag {};
-struct map_tag {};
-struct set_tag {};
+#include "common.hpp"
+using namespace shad_test_stl;
 
-template <typename T>
-struct ds_tag {
-  using type = void;
-};
+///////////////////////////////////////
+//
+// vector
+//
+///////////////////////////////////////
 
-template <typename U>
-struct ds_tag<std::vector<U>> {
-  using type = vector_tag;
-};
+using VT = std_vector_t;
 
-template <typename... U>
-struct ds_tag<std::unordered_map<U...>> {
-  using type = map_tag;
-};
+// transform
+BENCHMARK_TEMPLATE_DEFINE_F_(std_vector_transform, VT) {
+  using unary_t = add_two<it_value_t<VT>>;
+  auto f = std::transform<it_t<VT>, it_t<VT>, unary_t>;
+  this->run_io(st, f, unary_t{});
+}
+BENCHMARK_REGISTER_F_(std_vector_transform);
 
-template <typename U>
-struct ds_tag<std::set<U>> {
-  using type = set_tag;
-};
-}  // namespace shad_test_stl
+///////////////////////////////////////
+//
+// set
+//
+///////////////////////////////////////
 
-#endif
+using ST = std_set_t;
+
+// transform - not supported
+
+///////////////////////////////////////
+//
+// unordered_map
+//
+///////////////////////////////////////
+
+using UMT = std_unordered_map_t;
+
+// transform - not supported

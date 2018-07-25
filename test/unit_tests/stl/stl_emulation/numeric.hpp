@@ -22,36 +22,26 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef TEST_UNIT_TESTS_STL_DS_TAG_HPP_
-#define TEST_UNIT_TESTS_STL_DS_TAG_HPP_
-
-#include <unordered_map>
-#include <vector>
+#ifndef TEST_UNIT_TESTS_STL_STL_EMULATION_NUMERIC_HPP_
+#define TEST_UNIT_TESTS_STL_STL_EMULATION_NUMERIC_HPP_
 
 namespace shad_test_stl {
-struct vector_tag {};
-struct map_tag {};
-struct set_tag {};
 
-template <typename T>
-struct ds_tag {
-  using type = void;
-};
+template <class InputIt, class T>
+T accumulate_(InputIt first, InputIt last, T init) {
+  for (; first != last; ++first) {
+    init = std::move(init) + *first;  // std::move since C++20
+  }
+  return init;
+}
 
-template <typename U>
-struct ds_tag<std::vector<U>> {
-  using type = vector_tag;
-};
+template <class InputIt>
+typename InputIt::value_type reduce_(InputIt first, InputIt last) {
+  assert(first != last);
+  auto init = *first++;
+  return accumulate_(first, last, init);
+}
 
-template <typename... U>
-struct ds_tag<std::unordered_map<U...>> {
-  using type = map_tag;
-};
-
-template <typename U>
-struct ds_tag<std::set<U>> {
-  using type = set_tag;
-};
 }  // namespace shad_test_stl
 
 #endif

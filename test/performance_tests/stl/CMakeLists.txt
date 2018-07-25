@@ -1,8 +1,8 @@
 set(tests
-#  iterator_perf
-#  for_perf
-#  algorithm_perf
-  numeric_perf
+  L0_std_min_max
+  L0_std_non_modifying
+  L0_std_modifying
+  L0_std_numeric
 )
 
 foreach(t ${tests})

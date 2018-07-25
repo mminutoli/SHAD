@@ -22,36 +22,33 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef TEST_UNIT_TESTS_STL_DS_TAG_HPP_
-#define TEST_UNIT_TESTS_STL_DS_TAG_HPP_
+#include "gtest/gtest.h"
 
-#include <unordered_map>
-#include <vector>
+#include "common.hpp"
+using namespace shad_test_stl;
 
-namespace shad_test_stl {
-struct vector_tag {};
-struct map_tag {};
-struct set_tag {};
+typedef ::testing::Types<std_vector_t, std_unordered_map_t> AllTypes;
+TYPED_TEST_CASE(TestFixture, AllTypes);
 
-template <typename T>
-struct ds_tag {
-  using type = void;
-};
+TYPED_TEST(TestFixture, for_deref) {
+  int64_t obs_checksum = 0;
+  for (auto it = this->in.begin(); it != this->in.end(); ++it)
+    obs_checksum += val_to_int_(*it);
+  ASSERT_EQ(obs_checksum, expected_checksum<TypeParam>(this->kNumElements));
+}
 
-template <typename U>
-struct ds_tag<std::vector<U>> {
-  using type = vector_tag;
-};
+TYPED_TEST(TestFixture, for_const_deref) {
+  int64_t obs_checksum = 0;
+  for (auto it = this->in.cbegin(); it != this->in.cend(); ++it)
+    obs_checksum += val_to_int_(*it);
+  ASSERT_EQ(obs_checksum, expected_checksum<TypeParam>(this->kNumElements));
+}
 
-template <typename... U>
-struct ds_tag<std::unordered_map<U...>> {
-  using type = map_tag;
-};
+TYPED_TEST(TestFixture, for_inc_deref) {
+  int64_t obs_checksum = 0;
+  auto it = this->in.begin();
+  while (it != this->in.cend()) obs_checksum += val_to_int_(*it++);
+  ASSERT_EQ(obs_checksum, expected_checksum<TypeParam>(this->kNumElements));
+}
 
-template <typename U>
-struct ds_tag<std::set<U>> {
-  using type = set_tag;
-};
-}  // namespace shad_test_stl
-
-#endif
+// todo test arrow dereferencing
