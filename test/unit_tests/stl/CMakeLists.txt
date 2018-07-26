@@ -8,6 +8,11 @@ set(tests
 
 foreach(t ${tests})
   add_executable(${t} ${t}.cc)
+  if (SHAD_ENABLE_STD_REDUCE_TEST)
+    set_target_properties(
+      ${t} PROPERTIES
+      COMPILE_FLAGS "-DSTD_REDUCE_TEST")
+  endif()
   if (CLANG_TIDY_EXE)
     set_target_properties(
       ${t} PROPERTIES

@@ -49,6 +49,7 @@ TYPED_TEST(TF, std_accumulate) {
              shad_test_stl::make_val<val_t>(0));
 }
 
+#ifdef STD_REDUCE_TEST
 ///////////////////////////////////////
 //
 // reduce
@@ -59,3 +60,4 @@ TYPED_TEST(TF, std_reduce) {
   using val_t = typeof(*this->in.begin());
   this->test(std::reduce<it_t>, shad_test_stl::reduce_<it_t>);
 }
+#endif

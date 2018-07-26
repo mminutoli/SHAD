@@ -44,6 +44,7 @@ BENCHMARK_TEMPLATE_DEFINE_F_(std_vector_accumulate, VT) {
 }
 BENCHMARK_REGISTER_F_(std_vector_accumulate);
 
+#ifdef STD_REDUCE_TEST
 // reduce
 BENCHMARK_TEMPLATE_DEFINE_F_(std_vector_reduce, VT) {
   using it_t = typeof(this->in.begin());
@@ -51,6 +52,7 @@ BENCHMARK_TEMPLATE_DEFINE_F_(std_vector_reduce, VT) {
   this->run(st, f);
 }
 BENCHMARK_REGISTER_F_(std_vector_reduce);
+#endif
 
 ///////////////////////////////////////
 //
@@ -68,6 +70,7 @@ BENCHMARK_TEMPLATE_DEFINE_F_(std_set_accumulate, ST) {
 }
 BENCHMARK_REGISTER_F_(std_set_accumulate);
 
+#ifdef STD_REDUCE_TEST
 // reduce
 BENCHMARK_TEMPLATE_DEFINE_F_(std_set_reduce, ST) {
   using it_t = typeof(this->in.begin());
@@ -75,3 +78,4 @@ BENCHMARK_TEMPLATE_DEFINE_F_(std_set_reduce, ST) {
   this->run(st, f);
 }
 BENCHMARK_REGISTER_F_(std_set_reduce);
+#endif
