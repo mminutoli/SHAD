@@ -22,8 +22,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef TEST_UNIT_TESTS_STL_STL_EMULATION_ALGORITHM_HPP_
-#define TEST_UNIT_TESTS_STL_STL_EMULATION_ALGORITHM_HPP_
+#ifndef TEST_UNIT_TESTS_STL_STL_EMULATION_ALGORITHM_H_
+#define TEST_UNIT_TESTS_STL_STL_EMULATION_ALGORITHM_H_
 
 #include <algorithm>
 #include <functional>

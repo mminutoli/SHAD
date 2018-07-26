@@ -57,56 +57,64 @@ struct ds_tag<std::set<U>> {
 };
 
 // typing utilities
-template <typename T>
-using it_t = typename T::iterator;
-
-template <typename T>
-using output_it_t = typename T::output_iterator;
-
-template <typename T>
-using it_value_t = typename T::iterator::value_type;
 
 // types for data structures and iterators
 // todo add SHAD types
-using std_vector_t = std::vector<uint64_t>;
-using std_unordered_map_t = std::unordered_map<uint64_t, uint64_t>;
-using std_set_t = std::set<uint64_t>;
+using std_vector_t = std::vector<int>;
+using std_unordered_map_t = std::unordered_map<int, int>;
+using std_set_t = std::set<int>;
 
 using vector_it_val_t = typename std_vector_t::iterator::value_type;
 using map_it_val_t = typename std_unordered_map_t::iterator::value_type;
 using set_it_val_t = typename std_set_t::iterator::value_type;
 
-// all-even container creation
-template <typename T, typename tag_t>
-struct create_container__ {
-  T operator()(uint64_t size) {
-    T res;
-    for (uint64_t i = 0; i < size; ++i) res.push_back(i);
-    return res;
+// value creation
+template <typename T>
+T make_val(int v) {
+  return v;
+};
+
+template <>
+map_it_val_t make_val<map_it_val_t>(int v) {
+  return map_it_val_t{v, v};
+}
+
+// value insertion
+template <typename tag, typename T>
+struct insert_value_ {
+  void operator()(T &, const typename T::iterator::value_type) {}
+};
+
+template <typename T>
+struct insert_value_<vector_tag, T> {
+  void operator()(T &in, const typename T::iterator::value_type &val) {
+    in.push_back(val);
   }
 };
 
 template <typename T>
-struct create_container__<T, map_tag> {
-  T operator()(uint64_t size) {
-    T res;
-    for (uint64_t i = 0; i < size; ++i) res[i] = i;
-    return res;
+struct insert_value_<map_tag, T> {
+  void operator()(T &in, const typename T::iterator::value_type &val) {
+    in[val.first] = val.second;
   }
 };
 
 template <typename T>
-struct create_container__<T, set_tag> {
-  T operator()(uint64_t size) {
-    T res;
-    for (uint64_t i = 0; i < size; ++i) res.insert(i * 4);
-    return res;
+struct insert_value_<set_tag, T> {
+  void operator()(T &in, const typename T::iterator::value_type &val) {
+    in.insert(val);
   }
 };
 
+// container creation and expected checksum
 template <typename T>
-T create_container_(uint64_t size) {
-  return create_container__<T, typename ds_tag<T>::type>{}(size);
+T create_container_(size_t size, bool even = true) {
+  using tag = typename ds_tag<T>::type;
+  T res;
+  using val_t = typeof(*res.begin());
+  for (auto i = size; i > 0; --i)
+    insert_value_<tag, T>{}(res, make_val<val_t>(2 * i + !even));
+  return res;
 }
 
 // even/odd test
@@ -148,10 +156,6 @@ constexpr uint64_t BENCHMARK_SIZE_MULTIPLIER = 4;
 
 template <typename T>
 class shad_test_stl_PerfTestFixture : public benchmark::Fixture {
-  void SetUp(benchmark::State &state) {
-    in = shad_test_stl::create_container_<T>(state.range(0));
-  }
-
  public:
   template <typename F, typename... args_>
   void run(benchmark::State &state, F &&f, args_... args) {

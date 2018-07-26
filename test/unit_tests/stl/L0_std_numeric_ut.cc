@@ -26,13 +26,14 @@
 
 #include "gtest/gtest.h"
 
-#include "common.hpp"
-#include "stl_emulation/numeric.hpp"
+#include "common.h"
+#include "stl_emulation/numeric.h"
 
 template <typename T>
 using TF = shad_test_stl::TestFixture<T>;
 
-using TestTypes = ::testing::Types<shad_test_stl::std_vector_t>;
+using TestTypes =
+    ::testing::Types<shad_test_stl::std_vector_t, shad_test_stl::std_set_t>;
 TYPED_TEST_CASE(TF, TestTypes);
 
 ///////////////////////////////////////
@@ -42,7 +43,7 @@ TYPED_TEST_CASE(TF, TestTypes);
 ///////////////////////////////////////
 TYPED_TEST(TF, std_accumulate) {
   using it_t = typeof(this->in.begin());
-  using val_t = typeof(*this->in.begin());
+  using val_t = typename TypeParam::iterator::value_type;
   this->test(std::accumulate<it_t, val_t>,
              shad_test_stl::accumulate_<it_t, val_t>,
              shad_test_stl::make_val<val_t>(0));

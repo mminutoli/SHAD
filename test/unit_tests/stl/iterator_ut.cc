@@ -26,7 +26,7 @@
 
 #include "gtest/gtest.h"
 
-#include "common.hpp"
+#include "common.h"
 
 template <typename T>
 class InputIteratorTest : public ::testing::Test {
@@ -51,7 +51,8 @@ struct is_iterator<
 
 // todo add SHAD types
 typedef ::testing::Types<shad_test_stl::std_vector_t,
-                         shad_test_stl::std_unordered_map_t>
+                         shad_test_stl::std_unordered_map_t,
+                         shad_test_stl::std_set_t>
     AllTypes;
 
 TYPED_TEST_CASE(InputIteratorTest, AllTypes);

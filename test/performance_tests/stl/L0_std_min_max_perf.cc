@@ -26,7 +26,7 @@
 
 #include <benchmark/benchmark.h>
 
-#include "common.hpp"
+#include "common.h"
 
 ///////////////////////////////////////
 //

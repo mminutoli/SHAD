@@ -26,13 +26,15 @@
 
 #include "gtest/gtest.h"
 
-#include "common.hpp"
-#include "stl_emulation/algorithm.hpp"
+#include "common.h"
+#include "stl_emulation/algorithm.h"
 
 template <typename T>
 using TF = shad_test_stl::TestFixture<T>;
 
-using TestTypes = ::testing::Types<shad_test_stl::std_vector_t>;
+using TestTypes = ::testing::Types<shad_test_stl::std_vector_t,
+                                   shad_test_stl::std_unordered_map_t,
+                                   shad_test_stl::std_set_t>;
 TYPED_TEST_CASE(TF, TestTypes);
 
 ///////////////////////////////////////

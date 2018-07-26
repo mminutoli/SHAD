@@ -22,8 +22,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef TEST_UNIT_TESTS_STL_COMMON_HPP_
-#define TEST_UNIT_TESTS_STL_COMMON_HPP_
+#ifndef TEST_UNIT_TESTS_STL_COMMON_H_
+#define TEST_UNIT_TESTS_STL_COMMON_H_
 
 #include <unordered_map>
 #include <vector>
@@ -63,9 +63,11 @@ struct ds_tag<std::set<U>> {
 // todo add SHAD types
 using std_vector_t = std::vector<int>;
 using std_unordered_map_t = std::unordered_map<int, int>;
+using std_set_t = std::set<int>;
 
 using vector_it_val_t = typename std_vector_t::iterator::value_type;
 using map_it_val_t = typename std_unordered_map_t::iterator::value_type;
+using set_it_val_t = typename std_set_t::iterator::value_type;
 
 // dereferencing
 template <typename val_t>
@@ -106,6 +108,13 @@ template <typename T>
 struct insert_value_<map_tag, T> {
   void operator()(T &in, const typename T::iterator::value_type &val) {
     in[val.first] = val.second;
+  }
+};
+
+template <typename T>
+struct insert_value_<set_tag, T> {
+  void operator()(T &in, const typename T::iterator::value_type &val) {
+    in.insert(val);
   }
 };
 
