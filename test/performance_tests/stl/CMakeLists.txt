@@ -1,8 +1,8 @@
 set(tests
-  L0_std_min_max
-  L0_std_non_modifying
-  L0_std_modifying
-  L0_std_numeric
+  L0_std_min_max_perf
+  L0_std_non_modifying_perf
+  L0_std_modifying_perf
+  L0_std_numeric_perf
 )
 
 foreach(t ${tests})

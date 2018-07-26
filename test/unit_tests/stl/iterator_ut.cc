@@ -23,10 +23,10 @@
 //===----------------------------------------------------------------------===//
 
 #include <type_traits>
-#include <unordered_map>
-#include <vector>
 
 #include "gtest/gtest.h"
+
+#include "common.hpp"
 
 template <typename T>
 class InputIteratorTest : public ::testing::Test {
@@ -50,9 +50,9 @@ struct is_iterator<
 };
 
 // todo add SHAD types
-using std_vector_t = std::vector<int>;
-using std_unordered_map_t = std::unordered_map<int, int>;
-typedef ::testing::Types<std_vector_t, std_unordered_map_t> AllTypes;
+typedef ::testing::Types<shad_test_stl::std_vector_t,
+                         shad_test_stl::std_unordered_map_t>
+    AllTypes;
 
 TYPED_TEST_CASE(InputIteratorTest, AllTypes);
 

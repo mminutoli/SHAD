@@ -27,34 +27,38 @@
 #include <benchmark/benchmark.h>
 
 #include "common.hpp"
-using namespace shad_test_stl;
 
 ///////////////////////////////////////
 //
 // vector
 //
 ///////////////////////////////////////
-
-using VT = std_vector_t;
+using VT = shad_test_stl::std_vector_t;
 
 // all_of, any_of, none_of
 BENCHMARK_TEMPLATE_DEFINE_F_(std_vector_all_of, VT) {
-  using pred_t = is_even<it_value_t<VT>>;
-  auto f = std::all_of<it_t<VT>, pred_t>;
+  using it_t = typeof(this->in.begin());
+  using value_t = typeof(*this->in.begin());
+  using pred_t = shad_test_stl::is_even<value_t>;
+  auto f = std::all_of<it_t, pred_t>;
   this->run(st, f, pred_t{});
 }
 BENCHMARK_REGISTER_F_(std_vector_all_of);
 
 BENCHMARK_TEMPLATE_DEFINE_F_(std_vector_any_of, VT) {
-  using pred_t = is_odd<it_value_t<VT>>;
-  auto f = std::any_of<it_t<VT>, pred_t>;
+  using it_t = typeof(this->in.begin());
+  using value_t = typeof(*this->in.begin());
+  using pred_t = shad_test_stl::is_odd<value_t>;
+  auto f = std::any_of<it_t, pred_t>;
   this->run(st, f, pred_t{});
 }
 BENCHMARK_REGISTER_F_(std_vector_any_of);
 
 BENCHMARK_TEMPLATE_DEFINE_F_(std_vector_none_of, VT) {
-  using pred_t = is_odd<it_value_t<VT>>;
-  auto f = std::none_of<it_t<VT>, pred_t>;
+  using it_t = typeof(this->in.begin());
+  using value_t = typeof(*this->in.begin());
+  using pred_t = shad_test_stl::is_odd<value_t>;
+  auto f = std::none_of<it_t, pred_t>;
   this->run(st, f, pred_t{});
 }
 BENCHMARK_REGISTER_F_(std_vector_none_of);
@@ -63,14 +67,18 @@ BENCHMARK_REGISTER_F_(std_vector_none_of);
 
 // count, count_if
 BENCHMARK_TEMPLATE_DEFINE_F_(std_vector_count, VT) {
-  auto f = std::count<it_t<VT>, it_value_t<VT>>;
+  using it_t = typeof(this->in.begin());
+  using value_t = typeof(*this->in.begin());
+  auto f = std::count<it_t, value_t>;
   this->run(st, f, 0);
 }
 BENCHMARK_REGISTER_F_(std_vector_count);
 
 BENCHMARK_TEMPLATE_DEFINE_F_(std_vector_count_if, VT) {
-  using pred_t = is_even<it_value_t<VT>>;
-  auto f = std::count_if<it_t<VT>, pred_t>;
+  using it_t = typeof(this->in.begin());
+  using value_t = typeof(*this->in.begin());
+  using pred_t = shad_test_stl::is_even<value_t>;
+  auto f = std::count_if<it_t, pred_t>;
   this->run(st, f, pred_t{});
 }
 BENCHMARK_REGISTER_F_(std_vector_count_if);
@@ -79,21 +87,27 @@ BENCHMARK_REGISTER_F_(std_vector_count_if);
 
 // find, find_if, find_if_not
 BENCHMARK_TEMPLATE_DEFINE_F_(std_vector_find, VT) {
-  auto f = std::find<it_t<VT>, it_value_t<VT>>;
+  using it_t = typeof(this->in.begin());
+  using value_t = typeof(*this->in.begin());
+  auto f = std::find<it_t, value_t>;
   this->run(st, f, 1);
 }
 BENCHMARK_REGISTER_F_(std_vector_find);
 
 BENCHMARK_TEMPLATE_DEFINE_F_(std_vector_find_if, VT) {
-  using pred_t = is_odd<it_value_t<VT>>;
-  auto f = std::find_if<it_t<VT>, pred_t>;
+  using it_t = typeof(this->in.begin());
+  using value_t = typeof(*this->in.begin());
+  using pred_t = shad_test_stl::is_odd<value_t>;
+  auto f = std::find_if<it_t, pred_t>;
   this->run(st, f, pred_t{});
 }
 BENCHMARK_REGISTER_F_(std_vector_find_if);
 
 BENCHMARK_TEMPLATE_DEFINE_F_(std_vector_find_if_not, VT) {
-  using pred_t = is_odd<it_value_t<VT>>;
-  auto f = std::find_if_not<it_t<VT>, pred_t>;
+  using it_t = typeof(this->in.begin());
+  using value_t = typeof(*this->in.begin());
+  using pred_t = shad_test_stl::is_odd<value_t>;
+  auto f = std::find_if_not<it_t, pred_t>;
   this->run(st, f, pred_t{});
 }
 BENCHMARK_REGISTER_F_(std_vector_find_if_not);
@@ -102,7 +116,8 @@ BENCHMARK_REGISTER_F_(std_vector_find_if_not);
 
 // adjacent_find
 BENCHMARK_TEMPLATE_DEFINE_F_(std_vector_adjacent_find, VT) {
-  auto f = std::adjacent_find<it_t<VT>>;
+  using it_t = typeof(this->in.begin());
+  auto f = std::adjacent_find<it_t>;
   this->run(st, f);
 }
 BENCHMARK_REGISTER_F_(std_vector_adjacent_find);
@@ -114,27 +129,32 @@ BENCHMARK_REGISTER_F_(std_vector_adjacent_find);
 // set
 //
 ///////////////////////////////////////
-
-using ST = std_set_t;
+using ST = shad_test_stl::std_set_t;
 
 // all_of, any_of, none_of
 BENCHMARK_TEMPLATE_DEFINE_F_(std_set_all_of, ST) {
-  using pred_t = is_even<it_value_t<ST>>;
-  auto f = std::all_of<it_t<ST>, pred_t>;
+  using it_t = typeof(this->in.begin());
+  using value_t = typeof(*this->in.begin());
+  using pred_t = shad_test_stl::is_even<value_t>;
+  auto f = std::all_of<it_t, pred_t>;
   this->run(st, f, pred_t{});
 }
 BENCHMARK_REGISTER_F_(std_set_all_of);
 
 BENCHMARK_TEMPLATE_DEFINE_F_(std_set_any_of, ST) {
-  using pred_t = is_odd<it_value_t<ST>>;
-  auto f = std::any_of<it_t<ST>, pred_t>;
+  using it_t = typeof(this->in.begin());
+  using value_t = typeof(*this->in.begin());
+  using pred_t = shad_test_stl::is_odd<value_t>;
+  auto f = std::any_of<it_t, pred_t>;
   this->run(st, f, pred_t{});
 }
 BENCHMARK_REGISTER_F_(std_set_any_of);
 
 BENCHMARK_TEMPLATE_DEFINE_F_(std_set_none_of, ST) {
-  using pred_t = is_odd<it_value_t<ST>>;
-  auto f = std::none_of<it_t<ST>, pred_t>;
+  using it_t = typeof(this->in.begin());
+  using value_t = typeof(*this->in.begin());
+  using pred_t = shad_test_stl::is_odd<value_t>;
+  auto f = std::none_of<it_t, pred_t>;
   this->run(st, f, pred_t{});
 }
 BENCHMARK_REGISTER_F_(std_set_none_of);
@@ -143,14 +163,18 @@ BENCHMARK_REGISTER_F_(std_set_none_of);
 
 // count, count_if
 BENCHMARK_TEMPLATE_DEFINE_F_(std_set_count, ST) {
-  auto f = std::count<it_t<ST>, it_value_t<ST>>;
+  using it_t = typeof(this->in.begin());
+  using value_t = typeof(*this->in.begin());
+  auto f = std::count<it_t, value_t>;
   this->run(st, f, 0);
 }
 BENCHMARK_REGISTER_F_(std_set_count);
 
 BENCHMARK_TEMPLATE_DEFINE_F_(std_set_count_if, ST) {
-  using pred_t = is_even<it_value_t<ST>>;
-  auto f = std::count_if<it_t<ST>, pred_t>;
+  using it_t = typeof(this->in.begin());
+  using value_t = typeof(*this->in.begin());
+  using pred_t = shad_test_stl::is_even<value_t>;
+  auto f = std::count_if<it_t, pred_t>;
   this->run(st, f, pred_t{});
 }
 BENCHMARK_REGISTER_F_(std_set_count_if);
@@ -159,21 +183,27 @@ BENCHMARK_REGISTER_F_(std_set_count_if);
 
 // find, find_if, find_if_not
 BENCHMARK_TEMPLATE_DEFINE_F_(std_set_find, ST) {
-  auto f = std::find<it_t<ST>, it_value_t<ST>>;
+  using it_t = typeof(this->in.begin());
+  using value_t = typeof(*this->in.begin());
+  auto f = std::find<it_t, value_t>;
   this->run(st, f, 1);
 }
 BENCHMARK_REGISTER_F_(std_set_find);
 
 BENCHMARK_TEMPLATE_DEFINE_F_(std_set_find_if, ST) {
-  using pred_t = is_odd<it_value_t<ST>>;
-  auto f = std::find_if<it_t<ST>, pred_t>;
+  using it_t = typeof(this->in.begin());
+  using value_t = typeof(*this->in.begin());
+  using pred_t = shad_test_stl::is_odd<value_t>;
+  auto f = std::find_if<it_t, pred_t>;
   this->run(st, f, pred_t{});
 }
 BENCHMARK_REGISTER_F_(std_set_find_if);
 
 BENCHMARK_TEMPLATE_DEFINE_F_(std_set_find_if_not, ST) {
-  using pred_t = is_odd<it_value_t<ST>>;
-  auto f = std::find_if_not<it_t<ST>, pred_t>;
+  using it_t = typeof(this->in.begin());
+  using value_t = typeof(*this->in.begin());
+  using pred_t = shad_test_stl::is_odd<value_t>;
+  auto f = std::find_if_not<it_t, pred_t>;
   this->run(st, f, pred_t{});
 }
 BENCHMARK_REGISTER_F_(std_set_find_if_not);
@@ -182,7 +212,8 @@ BENCHMARK_REGISTER_F_(std_set_find_if_not);
 
 // adjacent_find
 BENCHMARK_TEMPLATE_DEFINE_F_(std_set_adjacent_find, ST) {
-  auto f = std::adjacent_find<it_t<ST>>;
+  using it_t = typeof(this->in.begin());
+  auto f = std::adjacent_find<it_t>;
   this->run(st, f);
 }
 BENCHMARK_REGISTER_F_(std_set_adjacent_find);
@@ -194,27 +225,32 @@ BENCHMARK_REGISTER_F_(std_set_adjacent_find);
 // unordered_map
 //
 ///////////////////////////////////////
-
-using UMT = std_unordered_map_t;
+using UMT = shad_test_stl::std_unordered_map_t;
 
 // all_of, any_of, none_of
 BENCHMARK_TEMPLATE_DEFINE_F_(std_unordered_map_all_of, UMT) {
-  using pred_t = is_even<it_value_t<UMT>>;
-  auto f = std::all_of<it_t<UMT>, pred_t>;
+  using it_t = typeof(this->in.begin());
+  using value_t = typeof(*this->in.begin());
+  using pred_t = shad_test_stl::is_even<value_t>;
+  auto f = std::all_of<it_t, pred_t>;
   this->run(st, f, pred_t{});
 }
 BENCHMARK_REGISTER_F_(std_unordered_map_all_of);
 
 BENCHMARK_TEMPLATE_DEFINE_F_(std_unordered_map_any_of, UMT) {
-  using pred_t = is_odd<it_value_t<UMT>>;
-  auto f = std::any_of<it_t<UMT>, pred_t>;
+  using it_t = typeof(this->in.begin());
+  using value_t = typeof(*this->in.begin());
+  using pred_t = shad_test_stl::is_odd<value_t>;
+  auto f = std::any_of<it_t, pred_t>;
   this->run(st, f, pred_t{});
 }
 BENCHMARK_REGISTER_F_(std_unordered_map_any_of);
 
 BENCHMARK_TEMPLATE_DEFINE_F_(std_unordered_map_none_of, UMT) {
-  using pred_t = is_odd<it_value_t<UMT>>;
-  auto f = std::none_of<it_t<UMT>, pred_t>;
+  using it_t = typeof(this->in.begin());
+  using value_t = typeof(*this->in.begin());
+  using pred_t = shad_test_stl::is_odd<value_t>;
+  auto f = std::none_of<it_t, pred_t>;
   this->run(st, f, pred_t{});
 }
 BENCHMARK_REGISTER_F_(std_unordered_map_none_of);
@@ -223,14 +259,18 @@ BENCHMARK_REGISTER_F_(std_unordered_map_none_of);
 
 // count, count_if
 BENCHMARK_TEMPLATE_DEFINE_F_(std_unordered_map_count, UMT) {
-  auto f = std::count<it_t<UMT>, it_value_t<UMT>>;
-  this->run(st, f, it_value_t<UMT>{0, 0});
+  using it_t = typeof(this->in.begin());
+  using value_t = typeof(*this->in.begin());
+  auto f = std::count<it_t, value_t>;
+  this->run(st, f, value_t{0, 0});
 }
 BENCHMARK_REGISTER_F_(std_unordered_map_count);
 
 BENCHMARK_TEMPLATE_DEFINE_F_(std_unordered_map_count_if, UMT) {
-  using pred_t = is_even<it_value_t<UMT>>;
-  auto f = std::count_if<it_t<UMT>, pred_t>;
+  using it_t = typeof(this->in.begin());
+  using value_t = typeof(*this->in.begin());
+  using pred_t = shad_test_stl::is_even<value_t>;
+  auto f = std::count_if<it_t, pred_t>;
   this->run(st, f, pred_t{});
 }
 BENCHMARK_REGISTER_F_(std_unordered_map_count_if);
@@ -239,21 +279,27 @@ BENCHMARK_REGISTER_F_(std_unordered_map_count_if);
 
 // find, find_if, find_if_not
 BENCHMARK_TEMPLATE_DEFINE_F_(std_unordered_map_find, UMT) {
-  auto f = std::find<it_t<UMT>, it_value_t<UMT>>;
-  this->run(st, f, it_value_t<UMT>{0, 1});
+  using it_t = typeof(this->in.begin());
+  using value_t = typeof(*this->in.begin());
+  auto f = std::find<it_t, value_t>;
+  this->run(st, f, value_t{0, 1});
 }
 BENCHMARK_REGISTER_F_(std_unordered_map_find);
 
 BENCHMARK_TEMPLATE_DEFINE_F_(std_unordered_map_find_if, UMT) {
-  using pred_t = is_odd<it_value_t<UMT>>;
-  auto f = std::find_if<it_t<UMT>, pred_t>;
+  using it_t = typeof(this->in.begin());
+  using value_t = typeof(*this->in.begin());
+  using pred_t = shad_test_stl::is_odd<value_t>;
+  auto f = std::find_if<it_t, pred_t>;
   this->run(st, f, pred_t{});
 }
 BENCHMARK_REGISTER_F_(std_unordered_map_find_if);
 
 BENCHMARK_TEMPLATE_DEFINE_F_(std_unordered_map_find_if_not, UMT) {
-  using pred_t = is_odd<it_value_t<UMT>>;
-  auto f = std::find_if_not<it_t<UMT>, pred_t>;
+  using it_t = typeof(this->in.begin());
+  using value_t = typeof(*this->in.begin());
+  using pred_t = shad_test_stl::is_odd<value_t>;
+  auto f = std::find_if_not<it_t, pred_t>;
   this->run(st, f, pred_t{});
 }
 BENCHMARK_REGISTER_F_(std_unordered_map_find_if_not);
@@ -262,7 +308,8 @@ BENCHMARK_REGISTER_F_(std_unordered_map_find_if_not);
 
 // adjacent_find
 BENCHMARK_TEMPLATE_DEFINE_F_(std_unordered_map_adjacent_find, UMT) {
-  auto f = std::adjacent_find<it_t<UMT>>;
+  using it_t = typeof(this->in.begin());
+  auto f = std::adjacent_find<it_t>;
   this->run(st, f);
 }
 BENCHMARK_REGISTER_F_(std_unordered_map_adjacent_find);

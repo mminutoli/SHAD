@@ -28,21 +28,24 @@
 
 #include "common.hpp"
 #include "stl_emulation/numeric.hpp"
-using namespace shad_test_stl;
 
-typedef ::testing::Types<std_vector_t> TestTypes;
-TYPED_TEST_CASE(TestFixture, TestTypes);
+template <typename T>
+using TF = shad_test_stl::TestFixture<T>;
+
+using TestTypes = ::testing::Types<shad_test_stl::std_vector_t>;
+TYPED_TEST_CASE(TF, TestTypes);
 
 ///////////////////////////////////////
 //
 // accumulate
 //
 ///////////////////////////////////////
-TYPED_TEST(TestFixture, std_accumulate) {
+TYPED_TEST(TF, std_accumulate) {
   using it_t = typeof(this->in.begin());
-  using val_t = it_value_t<TypeParam>;
-  this->test(std::accumulate<it_t, val_t>, accumulate_<it_t, val_t>,
-             make_val<val_t>(0));
+  using val_t = typeof(*this->in.begin());
+  this->test(std::accumulate<it_t, val_t>,
+             shad_test_stl::accumulate_<it_t, val_t>,
+             shad_test_stl::make_val<val_t>(0));
 }
 
 ///////////////////////////////////////
@@ -50,8 +53,8 @@ TYPED_TEST(TestFixture, std_accumulate) {
 // reduce
 //
 ///////////////////////////////////////
-TYPED_TEST(TestFixture, std_reduce) {
+TYPED_TEST(TF, std_reduce) {
   using it_t = typeof(this->in.begin());
-  using val_t = it_value_t<TypeParam>;
-  this->test(std::reduce<it_t>, reduce_<it_t>);
+  using val_t = typeof(*this->in.begin());
+  this->test(std::reduce<it_t>, shad_test_stl::reduce_<it_t>);
 }

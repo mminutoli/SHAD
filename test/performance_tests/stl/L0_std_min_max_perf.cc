@@ -24,43 +24,62 @@
 
 #include <algorithm>
 
-#include "gtest/gtest.h"
+#include <benchmark/benchmark.h>
 
 #include "common.hpp"
-#include "stl_emulation/algorithm.hpp"
-
-template <typename T>
-using TF = shad_test_stl::TestFixture<T>;
-
-using TestTypes = ::testing::Types<shad_test_stl::std_vector_t>;
-TYPED_TEST_CASE(TF, TestTypes);
 
 ///////////////////////////////////////
 //
-// min_element
+// std::vector
 //
 ///////////////////////////////////////
-TYPED_TEST(TF, std_min_element) {
+using VT = shad_test_stl::std_vector_t;
+
+BENCHMARK_TEMPLATE_DEFINE_F_(std_vector_min_element, VT) {
   using it_t = typeof(this->in.begin());
-  this->test(std::min_element<it_t>, shad_test_stl::min_element_<it_t>);
+  auto f = std::min_element<it_t>;
+  this->run(st, f);
 }
+BENCHMARK_REGISTER_F_(std_vector_min_element)
+
+BENCHMARK_TEMPLATE_DEFINE_F_(std_vector_max_element, VT) {
+  using it_t = typeof(this->in.begin());
+  auto f = std::max_element<it_t>;
+  this->run(st, f);
+}
+BENCHMARK_REGISTER_F_(std_vector_max_element)
+
+BENCHMARK_TEMPLATE_DEFINE_F_(std_vector_minmax_element, VT) {
+  using it_t = typeof(this->in.begin());
+  auto f = std::minmax_element<it_t>;
+  this->run(st, f);
+}
+BENCHMARK_REGISTER_F_(std_vector_minmax_element)
 
 ///////////////////////////////////////
 //
-// max_element
+// std::set
 //
 ///////////////////////////////////////
-TYPED_TEST(TF, std_max_element) {
-  using it_t = typeof(this->in.begin());
-  this->test(std::max_element<it_t>, shad_test_stl::max_element_<it_t>);
-}
+using ST = shad_test_stl::std_set_t;
 
-///////////////////////////////////////
-//
-// minmax_element
-//
-///////////////////////////////////////
-TYPED_TEST(TF, std_minmax_element) {
+BENCHMARK_TEMPLATE_DEFINE_F_(std_set_min_element, ST) {
   using it_t = typeof(this->in.begin());
-  this->test(std::minmax_element<it_t>, shad_test_stl::minmax_element_<it_t>);
+  auto f = std::min_element<it_t>;
+  this->run(st, f);
 }
+BENCHMARK_REGISTER_F_(std_set_min_element)
+
+BENCHMARK_TEMPLATE_DEFINE_F_(std_set_max_element, ST) {
+  using it_t = typeof(this->in.begin());
+  auto f = std::max_element<it_t>;
+  this->run(st, f);
+}
+BENCHMARK_REGISTER_F_(std_set_max_element)
+
+BENCHMARK_TEMPLATE_DEFINE_F_(std_set_minmax_element, ST) {
+  using it_t = typeof(this->in.begin());
+  auto f = std::minmax_element<it_t>;
+  this->run(st, f);
+}
+BENCHMARK_REGISTER_F_(std_set_minmax_element)

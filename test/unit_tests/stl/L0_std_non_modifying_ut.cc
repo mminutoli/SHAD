@@ -28,42 +28,46 @@
 
 #include "common.hpp"
 #include "stl_emulation/algorithm.hpp"
-using namespace shad_test_stl;
 
-typedef ::testing::Types<std_vector_t, std_unordered_map_t> TestTypes;
-TYPED_TEST_CASE(TestFixture, TestTypes);
+template <typename T>
+using TF = shad_test_stl::TestFixture<T>;
+
+using TestTypes = ::testing::Types<shad_test_stl::std_vector_t>;
+TYPED_TEST_CASE(TF, TestTypes);
 
 ///////////////////////////////////////
 //
 // find_if, find_if_not
 //
 ///////////////////////////////////////
-TYPED_TEST(TestFixture, std_find_if) {
+TYPED_TEST(TF, std_find_if) {
   using it_t = typeof(this->in.begin());
+  using value_t = typeof(*this->in.begin());
 
   // found
-  this->test(std::find_if<it_t, is_even<it_value_t<TypeParam>>>,
-             find_if_<it_t, is_even<it_value_t<TypeParam>>>,
-             is_even<it_value_t<TypeParam>>{});
+  this->test(std::find_if<it_t, shad_test_stl::is_even<value_t>>,
+             shad_test_stl::find_if_<it_t, shad_test_stl::is_even<value_t>>,
+             shad_test_stl::is_even<value_t>{});
 
   // not found
-  this->test(std::find_if<it_t, is_odd<it_value_t<TypeParam>>>,
-             find_if_<it_t, is_odd<it_value_t<TypeParam>>>,
-             is_odd<it_value_t<TypeParam>>{});
+  this->test(std::find_if<it_t, shad_test_stl::is_odd<value_t>>,
+             shad_test_stl::find_if_<it_t, shad_test_stl::is_odd<value_t>>,
+             shad_test_stl::is_odd<value_t>{});
 }
 
-TYPED_TEST(TestFixture, std_find_if_not) {
+TYPED_TEST(TF, std_find_if_not) {
   using it_t = typeof(this->in.begin());
+  using value_t = typeof(*this->in.begin());
 
   // not found
-  this->test(std::find_if_not<it_t, is_even<it_value_t<TypeParam>>>,
-             find_if_not_<it_t, is_even<it_value_t<TypeParam>>>,
-             is_even<it_value_t<TypeParam>>{});
+  this->test(std::find_if_not<it_t, shad_test_stl::is_even<value_t>>,
+             shad_test_stl::find_if_not_<it_t, shad_test_stl::is_even<value_t>>,
+             shad_test_stl::is_even<value_t>{});
 
   // found
-  this->test(std::find_if_not<it_t, is_odd<it_value_t<TypeParam>>>,
-             find_if_not_<it_t, is_odd<it_value_t<TypeParam>>>,
-             is_odd<it_value_t<TypeParam>>{});
+  this->test(std::find_if_not<it_t, shad_test_stl::is_odd<value_t>>,
+             shad_test_stl::find_if_not_<it_t, shad_test_stl::is_odd<value_t>>,
+             shad_test_stl::is_odd<value_t>{});
 }
 
 ///////////////////////////////////////
@@ -71,46 +75,49 @@ TYPED_TEST(TestFixture, std_find_if_not) {
 // all_of, any_of, none_of
 //
 ///////////////////////////////////////
-TYPED_TEST(TestFixture, std_all_of) {
+TYPED_TEST(TF, std_all_of) {
   using it_t = typeof(this->in.begin());
+  using value_t = typeof(*this->in.begin());
 
   // true
-  this->test(std::all_of<it_t, is_even<it_value_t<TypeParam>>>,
-             all_of_<it_t, is_even<it_value_t<TypeParam>>>,
-             is_even<it_value_t<TypeParam>>{});
+  this->test(std::all_of<it_t, shad_test_stl::is_even<value_t>>,
+             shad_test_stl::all_of_<it_t, shad_test_stl::is_even<value_t>>,
+             shad_test_stl::is_even<value_t>{});
 
   // false
-  this->test(std::all_of<it_t, is_odd<it_value_t<TypeParam>>>,
-             all_of_<it_t, is_odd<it_value_t<TypeParam>>>,
-             is_odd<it_value_t<TypeParam>>{});
+  this->test(std::all_of<it_t, shad_test_stl::is_odd<value_t>>,
+             shad_test_stl::all_of_<it_t, shad_test_stl::is_odd<value_t>>,
+             shad_test_stl::is_odd<value_t>{});
 }
 
-TYPED_TEST(TestFixture, std_any_of) {
+TYPED_TEST(TF, std_any_of) {
   using it_t = typeof(this->in.begin());
+  using value_t = typeof(*this->in.begin());
 
   // true
-  this->test(std::any_of<it_t, is_even<it_value_t<TypeParam>>>,
-             any_of_<it_t, is_even<it_value_t<TypeParam>>>,
-             is_even<it_value_t<TypeParam>>{});
+  this->test(std::any_of<it_t, shad_test_stl::is_even<value_t>>,
+             shad_test_stl::any_of_<it_t, shad_test_stl::is_even<value_t>>,
+             shad_test_stl::is_even<value_t>{});
 
   // false
-  this->test(std::any_of<it_t, is_odd<it_value_t<TypeParam>>>,
-             any_of_<it_t, is_odd<it_value_t<TypeParam>>>,
-             is_odd<it_value_t<TypeParam>>{});
+  this->test(std::any_of<it_t, shad_test_stl::is_odd<value_t>>,
+             shad_test_stl::any_of_<it_t, shad_test_stl::is_odd<value_t>>,
+             shad_test_stl::is_odd<value_t>{});
 }
 
-TYPED_TEST(TestFixture, std_none_of) {
+TYPED_TEST(TF, std_none_of) {
   using it_t = typeof(this->in.begin());
+  using value_t = typeof(*this->in.begin());
 
   // false
-  this->test(std::none_of<it_t, is_even<it_value_t<TypeParam>>>,
-             none_of_<it_t, is_even<it_value_t<TypeParam>>>,
-             is_even<it_value_t<TypeParam>>{});
+  this->test(std::none_of<it_t, shad_test_stl::is_even<value_t>>,
+             shad_test_stl::none_of_<it_t, shad_test_stl::is_even<value_t>>,
+             shad_test_stl::is_even<value_t>{});
 
   // true
-  this->test(std::none_of<it_t, is_odd<it_value_t<TypeParam>>>,
-             none_of_<it_t, is_odd<it_value_t<TypeParam>>>,
-             is_odd<it_value_t<TypeParam>>{});
+  this->test(std::none_of<it_t, shad_test_stl::is_odd<value_t>>,
+             shad_test_stl::none_of_<it_t, shad_test_stl::is_odd<value_t>>,
+             shad_test_stl::is_odd<value_t>{});
 }
 
 ///////////////////////////////////////
@@ -124,32 +131,32 @@ TYPED_TEST(TestFixture, std_none_of) {
 // count, count_if
 //
 ///////////////////////////////////////
-TYPED_TEST(TestFixture, std_count) {
+TYPED_TEST(TF, std_count) {
   using it_t = typeof(this->in.begin());
+  using value_t = typeof(*this->in.begin());
 
   // occurring
-  this->test(std::count<it_t, it_value_t<TypeParam>>,
-             count_<it_t, it_value_t<TypeParam>>,
-             make_val<it_value_t<TypeParam>>(0));
+  this->test(std::count<it_t, value_t>, shad_test_stl::count_<it_t, value_t>,
+             shad_test_stl::make_val<value_t>(0));
 
   // not occurring
-  this->test(std::count<it_t, it_value_t<TypeParam>>,
-             count_<it_t, it_value_t<TypeParam>>,
-             make_val<it_value_t<TypeParam>>(1));
+  this->test(std::count<it_t, value_t>, shad_test_stl::count_<it_t, value_t>,
+             shad_test_stl::make_val<value_t>(1));
 }
 
-TYPED_TEST(TestFixture, std_count_if) {
+TYPED_TEST(TF, std_count_if) {
   using it_t = typeof(this->in.begin());
+  using value_t = typeof(*this->in.begin());
 
   // all
-  this->test(std::count_if<it_t, is_even<it_value_t<TypeParam>>>,
-             count_if_<it_t, is_even<it_value_t<TypeParam>>>,
-             is_even<it_value_t<TypeParam>>{});
+  this->test(std::count_if<it_t, shad_test_stl::is_even<value_t>>,
+             shad_test_stl::count_if_<it_t, shad_test_stl::is_even<value_t>>,
+             shad_test_stl::is_even<value_t>{});
 
   // none
-  this->test(std::count_if<it_t, is_odd<it_value_t<TypeParam>>>,
-             count_if_<it_t, is_odd<it_value_t<TypeParam>>>,
-             is_odd<it_value_t<TypeParam>>{});
+  this->test(std::count_if<it_t, shad_test_stl::is_odd<value_t>>,
+             shad_test_stl::count_if_<it_t, shad_test_stl::is_odd<value_t>>,
+             shad_test_stl::is_odd<value_t>{});
 }
 
 ///////////////////////////////////////
@@ -163,18 +170,17 @@ TYPED_TEST(TestFixture, std_count_if) {
 // find
 //
 ///////////////////////////////////////
-TYPED_TEST(TestFixture, std_find) {
+TYPED_TEST(TF, std_find) {
   using it_t = typeof(this->in.begin());
+  using value_t = typeof(*this->in.begin());
 
   // occurring
-  this->test(std::find<it_t, it_value_t<TypeParam>>,
-             find_<it_t, it_value_t<TypeParam>>,
-             make_val<it_value_t<TypeParam>>(0));
+  this->test(std::find<it_t, value_t>, shad_test_stl::find_<it_t, value_t>,
+             shad_test_stl::make_val<value_t>(0));
 
   // not occurring
-  this->test(std::find<it_t, it_value_t<TypeParam>>,
-             find_<it_t, it_value_t<TypeParam>>,
-             make_val<it_value_t<TypeParam>>(1));
+  this->test(std::find<it_t, value_t>, shad_test_stl::find_<it_t, value_t>,
+             shad_test_stl::make_val<value_t>(1));
 }
 
 ///////////////////////////////////////
@@ -182,18 +188,18 @@ TYPED_TEST(TestFixture, std_find) {
 // find_end
 //
 ///////////////////////////////////////
-TYPED_TEST(TestFixture, std_find_end) {
+TYPED_TEST(TF, std_find_end) {
   using it_t = typeof(this->in.begin());
 
   // occurring
-  auto s = subseq_from_(this->in, this->kNumElements - 32, 32);
-  this->test(std::find_end<it_t, it_t>, find_end_<it_t, it_t>, s.begin(),
-             s.end());
+  auto s = shad_test_stl::subseq_from_(this->in, this->kNumElements - 32, 32);
+  this->test(std::find_end<it_t, it_t>, shad_test_stl::find_end_<it_t, it_t>,
+             s.begin(), s.end());
 
   // not occurring
-  s = create_container_<TypeParam>(32, false);
-  this->test(std::find_end<it_t, it_t>, find_end_<it_t, it_t>, s.begin(),
-             s.end());
+  s = shad_test_stl::create_container_<TypeParam>(32, false);
+  this->test(std::find_end<it_t, it_t>, shad_test_stl::find_end_<it_t, it_t>,
+             s.begin(), s.end());
 }
 
 ///////////////////////////////////////
@@ -201,18 +207,18 @@ TYPED_TEST(TestFixture, std_find_end) {
 // find_first_of
 //
 ///////////////////////////////////////
-TYPED_TEST(TestFixture, std_find_first_of) {
+TYPED_TEST(TF, std_find_first_of) {
   using it_t = typeof(this->in.begin());
 
   // occurring
-  auto s = subseq_from_(this->in, this->kNumElements - 32, 32);
-  this->test(std::find_first_of<it_t, it_t>, find_first_of_<it_t, it_t>,
-             s.begin(), s.end());
+  auto s = shad_test_stl::subseq_from_(this->in, this->kNumElements - 32, 32);
+  this->test(std::find_first_of<it_t, it_t>,
+             shad_test_stl::find_first_of_<it_t, it_t>, s.begin(), s.end());
 
   // not occurring
-  s = create_container_<TypeParam>(32, false);
-  this->test(std::find_first_of<it_t, it_t>, find_first_of_<it_t, it_t>,
-             s.begin(), s.end());
+  s = shad_test_stl::create_container_<TypeParam>(32, false);
+  this->test(std::find_first_of<it_t, it_t>,
+             shad_test_stl::find_first_of_<it_t, it_t>, s.begin(), s.end());
 }
 
 ///////////////////////////////////////
@@ -220,11 +226,11 @@ TYPED_TEST(TestFixture, std_find_first_of) {
 // adjacent_find
 //
 ///////////////////////////////////////
-TYPED_TEST(TestFixture, std_adjacent_find) {
+TYPED_TEST(TF, std_adjacent_find) {
   using it_t = typeof(this->in.begin());
 
   // none
-  this->test(std::adjacent_find<it_t>, adjacent_find_<it_t>);
+  this->test(std::adjacent_find<it_t>, shad_test_stl::adjacent_find_<it_t>);
 
   // some - todo
 }
@@ -234,16 +240,18 @@ TYPED_TEST(TestFixture, std_adjacent_find) {
 // search
 //
 ///////////////////////////////////////
-TYPED_TEST(TestFixture, std_search) {
+TYPED_TEST(TF, std_search) {
   using it_t = typeof(this->in.begin());
 
   // occurring
-  auto s = subseq_from_(this->in, this->kNumElements - 32, 32);
-  this->test(std::search<it_t, it_t>, search_<it_t, it_t>, s.begin(), s.end());
+  auto s = shad_test_stl::subseq_from_(this->in, this->kNumElements - 32, 32);
+  this->test(std::search<it_t, it_t>, shad_test_stl::search_<it_t, it_t>,
+             s.begin(), s.end());
 
   // not occurring
-  s = create_container_<TypeParam>(32, false);
-  this->test(std::search<it_t, it_t>, search_<it_t, it_t>, s.begin(), s.end());
+  s = shad_test_stl::create_container_<TypeParam>(32, false);
+  this->test(std::search<it_t, it_t>, shad_test_stl::search_<it_t, it_t>,
+             s.begin(), s.end());
 }
 
 ///////////////////////////////////////
@@ -251,14 +259,16 @@ TYPED_TEST(TestFixture, std_search) {
 // search_n - todo check why failing
 //
 ///////////////////////////////////////
-// TYPED_TEST(AlgorithmTestFixture, std_search_n) {
+// TYPED_TEST(AlgorithmTF, std_search_n) {
 //  using it_t = typeof(this->in.begin());
-//  using val_t = it_value_t<TypeParam>;
+//  using val_t = value_t;
 //
 //  for (size_t i = 0; i < 3; ++i) {
 //    this->test(std::search_n<it_t, size_t, val_t>,
-//               search_n_<it_t, size_t, val_t>, i, make_val<val_t>(0));
+//               search_n_<it_t, size_t, val_t>, i,
+//               shad_test_stl::make_val<val_t>(0));
 //    this->test(std::search_n<it_t, size_t, val_t>,
-//               search_n_<it_t, size_t, val_t>, i, make_val<val_t>(1));
+//               search_n_<it_t, size_t, val_t>, i,
+//               shad_test_stl::make_val<val_t>(1));
 //  }
 //}

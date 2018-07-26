@@ -30,16 +30,34 @@
 
 #include "gtest/gtest.h"
 
-#include "ds_tag.hpp"
-
 namespace shad_test_stl {
 
-// typing utilities
-template <typename T>
-using it_t = typename T::iterator;
+// data-structure tags
+struct vector_tag {};
+struct map_tag {};
+struct set_tag {};
 
 template <typename T>
-using it_value_t = typename T::iterator::value_type;
+struct ds_tag {
+  using type = void;
+};
+
+template <typename U>
+struct ds_tag<std::vector<U>> {
+  using type = vector_tag;
+};
+
+template <typename... U>
+struct ds_tag<std::unordered_map<U...>> {
+  using type = map_tag;
+};
+
+template <typename U>
+struct ds_tag<std::set<U>> {
+  using type = set_tag;
+};
+
+// typing utilities
 
 // types for data structures and iterators
 // todo add SHAD types
@@ -96,17 +114,19 @@ template <typename T>
 T create_container_(size_t size, bool even = true) {
   using tag = typename ds_tag<T>::type;
   T res;
+  using val_t = typeof(*res.begin());
   for (auto i = size; i > 0; --i)
-    insert_value_<tag, T>{}(res, make_val<it_value_t<T>>(2 * i + !even));
+    insert_value_<tag, T>{}(res, make_val<val_t>(2 * i + !even));
   return res;
 }
 
 template <typename T>
 int expected_checksum(size_t size, bool even = true) {
   using tag = typename ds_tag<T>::type;
+  using val_t = typeof(*T{}.begin());
   int res = 0;
   for (auto i = size; i > 0; --i)
-    res += val_to_int_(make_val<it_value_t<T>>(2 * i + !even));
+    res += val_to_int_(make_val<val_t>(2 * i + !even));
   return res;
 }
 

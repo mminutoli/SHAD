@@ -29,9 +29,32 @@
 #include <unordered_map>
 #include <vector>
 
-#include "ds_tag.hpp"
-
 namespace shad_test_stl {
+
+// data-structure tags
+struct vector_tag {};
+struct map_tag {};
+struct set_tag {};
+
+template <typename T>
+struct ds_tag {
+  using type = void;
+};
+
+template <typename U>
+struct ds_tag<std::vector<U>> {
+  using type = vector_tag;
+};
+
+template <typename... U>
+struct ds_tag<std::unordered_map<U...>> {
+  using type = map_tag;
+};
+
+template <typename U>
+struct ds_tag<std::set<U>> {
+  using type = set_tag;
+};
 
 // typing utilities
 template <typename T>
@@ -121,32 +144,40 @@ struct add_two<map_it_val_t> {
 constexpr uint64_t BENCHMARK_MIN_SIZE = 1024;
 constexpr uint64_t BENCHMARK_MAX_SIZE = 64 << 20;
 constexpr uint64_t BENCHMARK_SIZE_MULTIPLIER = 4;
+}  // namespace shad_test_stl
 
 template <typename T>
-class PerfTestFixture : public benchmark::Fixture {
+class shad_test_stl_PerfTestFixture : public benchmark::Fixture {
+  void SetUp(benchmark::State &state) {
+    in = shad_test_stl::create_container_<T>(state.range(0));
+  }
+
  public:
   template <typename F, typename... args_>
   void run(benchmark::State &state, F &&f, args_... args) {
-    auto in = create_container_<T>(state.range(0));
+    in = shad_test_stl::create_container_<T>(state.range(0));
     for (auto _ : state) f(in.begin(), in.end(), args...);
   }
 
   template <typename F, typename... args_>
   void run_io(benchmark::State &state, F &&f, args_... args) {
-    auto in = create_container_<T>(state.range(0));
-    auto out = create_container_<T>(state.range(0));
+    in = shad_test_stl::create_container_<T>(state.range(0));
+    auto out = shad_test_stl::create_container_<T>(state.range(0));
     for (auto _ : state) f(in.begin(), in.end(), out.begin(), args...);
   }
+
+ protected:
+  T in;
 };
 
-#define BENCHMARK_TEMPLATE_DEFINE_F_(x, y)           \
-  BENCHMARK_TEMPLATE_DEFINE_F(PerfTestFixture, x, y) \
+#define BENCHMARK_TEMPLATE_DEFINE_F_(x, y)                         \
+  BENCHMARK_TEMPLATE_DEFINE_F(shad_test_stl_PerfTestFixture, x, y) \
   (benchmark::State & st)
 
-#define BENCHMARK_REGISTER_F_(x)                   \
-  BENCHMARK_REGISTER_F(PerfTestFixture, x)         \
-      ->RangeMultiplier(BENCHMARK_SIZE_MULTIPLIER) \
-      ->Range(BENCHMARK_MIN_SIZE, BENCHMARK_MAX_SIZE);
-}  // namespace shad_test_stl
+#define BENCHMARK_REGISTER_F_(x)                                  \
+  BENCHMARK_REGISTER_F(shad_test_stl_PerfTestFixture, x)          \
+      ->RangeMultiplier(shad_test_stl::BENCHMARK_SIZE_MULTIPLIER) \
+      ->Range(shad_test_stl::BENCHMARK_MIN_SIZE,                  \
+              shad_test_stl::BENCHMARK_MAX_SIZE);
 
 #endif

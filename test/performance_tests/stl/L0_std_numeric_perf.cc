@@ -27,26 +27,27 @@
 #include <benchmark/benchmark.h>
 
 #include "common.hpp"
-using namespace shad_test_stl;
 
 ///////////////////////////////////////
 //
 // vector
 //
 ///////////////////////////////////////
-
-using VT = std_vector_t;
+using VT = shad_test_stl::std_vector_t;
 
 // accumulate
 BENCHMARK_TEMPLATE_DEFINE_F_(std_vector_accumulate, VT) {
-  auto f = std::accumulate<it_t<VT>, it_value_t<VT>>;
+  using it_t = typeof(this->in.begin());
+  using val_t = typename VT::iterator::value_type;
+  auto f = std::accumulate<it_t, val_t>;
   this->run(st, f, 0);
 }
 BENCHMARK_REGISTER_F_(std_vector_accumulate);
 
 // reduce
 BENCHMARK_TEMPLATE_DEFINE_F_(std_vector_reduce, VT) {
-  auto f = std::reduce<it_t<VT>>;
+  using it_t = typeof(this->in.begin());
+  auto f = std::reduce<it_t>;
   this->run(st, f);
 }
 BENCHMARK_REGISTER_F_(std_vector_reduce);
@@ -56,19 +57,21 @@ BENCHMARK_REGISTER_F_(std_vector_reduce);
 // set
 //
 ///////////////////////////////////////
-
-using ST = std_set_t;
+using ST = shad_test_stl::std_set_t;
 
 // accumulate
 BENCHMARK_TEMPLATE_DEFINE_F_(std_set_accumulate, ST) {
-  auto f = std::accumulate<it_t<ST>, it_value_t<ST>>;
+  using it_t = typeof(this->in.begin());
+  using val_t = typename ST::iterator::value_type;
+  auto f = std::accumulate<it_t, val_t>;
   this->run(st, f, 0);
 }
 BENCHMARK_REGISTER_F_(std_set_accumulate);
 
 // reduce
 BENCHMARK_TEMPLATE_DEFINE_F_(std_set_reduce, ST) {
-  auto f = std::reduce<it_t<ST>>;
+  using it_t = typeof(this->in.begin());
+  auto f = std::reduce<it_t>;
   this->run(st, f);
 }
 BENCHMARK_REGISTER_F_(std_set_reduce);
