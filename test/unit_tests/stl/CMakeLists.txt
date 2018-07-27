@@ -1,5 +1,4 @@
 set(tests
-  iterator_ut
   for_ut
   L0_std_min_max_ut
   L0_std_non_modifying_ut
