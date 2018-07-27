@@ -36,7 +36,8 @@ T accumulate_(InputIt first, InputIt last, T init) {
 }
 
 template <class InputIt>
-typename InputIt::value_type reduce_(InputIt first, InputIt last) {
+typename std::iterator_traits<InputIt>::value_type reduce_(InputIt first,
+                                                           InputIt last) {
   assert(first != last);
   auto init = *first++;
   return accumulate_(first, last, init);

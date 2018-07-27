@@ -23,45 +23,93 @@
 //===----------------------------------------------------------------------===//
 
 #include <algorithm>
+#include <array>
+#include <set>
+#include <vector>
 
 #include "gtest/gtest.h"
+
+#include "shad/data_structures/array.h"
 
 #include "common.h"
 #include "stl_emulation/algorithm.h"
 
+///////////////////////////////////////
+//
+// std::vector
+//
+///////////////////////////////////////
 template <typename T>
-using TF = shad_test_stl::TestFixture<T>;
+using VTF = shad_test_stl::VectorTestFixture<T>;
 
-using TestTypes =
-    ::testing::Types<shad_test_stl::std_vector_t, shad_test_stl::std_set_t>;
-TYPED_TEST_CASE(TF, TestTypes);
+using VTF_TestTypes = ::testing::Types<std::vector<int>>;
+TYPED_TEST_CASE(VTF, VTF_TestTypes);
 
-///////////////////////////////////////
-//
-// min_element
-//
-///////////////////////////////////////
-TYPED_TEST(TF, std_min_element) {
-  using it_t = typeof(this->in.begin());
+TYPED_TEST(VTF, min_element) {
+  using it_t = typeof(this->in->begin());
   this->test(std::min_element<it_t>, shad_test_stl::min_element_<it_t>);
 }
 
-///////////////////////////////////////
-//
-// max_element
-//
-///////////////////////////////////////
-TYPED_TEST(TF, std_max_element) {
-  using it_t = typeof(this->in.begin());
+TYPED_TEST(VTF, max_element) {
+  using it_t = typeof(this->in->begin());
   this->test(std::max_element<it_t>, shad_test_stl::max_element_<it_t>);
+}
+
+TYPED_TEST(VTF, minmax_element) {
+  using it_t = typeof(this->in->begin());
+  this->test(std::minmax_element<it_t>, shad_test_stl::minmax_element_<it_t>);
 }
 
 ///////////////////////////////////////
 //
-// minmax_element
+// std::array, shad::array
 //
 ///////////////////////////////////////
-TYPED_TEST(TF, std_minmax_element) {
-  using it_t = typeof(this->in.begin());
+template <typename T>
+using ATF = shad_test_stl::ArrayTestFixture<T>;
+
+//todo add shad::array<int, shad_test_stl::kNumElements>
+using ATF_TestTypes =
+    ::testing::Types<std::array<int, shad_test_stl::kNumElements>>;
+TYPED_TEST_CASE(ATF, ATF_TestTypes);
+
+TYPED_TEST(ATF, min_element) {
+  using it_t = typeof(this->in->begin());
+  this->test(std::min_element<it_t>, shad_test_stl::min_element_<it_t>);
+}
+
+TYPED_TEST(ATF, max_element) {
+  using it_t = typeof(this->in->begin());
+  this->test(std::max_element<it_t>, shad_test_stl::max_element_<it_t>);
+}
+
+TYPED_TEST(ATF, minmax_element) {
+  using it_t = typeof(this->in->begin());
+  this->test(std::minmax_element<it_t>, shad_test_stl::minmax_element_<it_t>);
+}
+
+///////////////////////////////////////
+//
+// std::set
+//
+///////////////////////////////////////
+template <typename T>
+using STF = shad_test_stl::SetTestFixture<T>;
+
+using STF_TestTypes = ::testing::Types<std::set<int>>;
+TYPED_TEST_CASE(STF, STF_TestTypes);
+
+TYPED_TEST(STF, min_element) {
+  using it_t = typeof(this->in->begin());
+  this->test(std::min_element<it_t>, shad_test_stl::min_element_<it_t>);
+}
+
+TYPED_TEST(STF, max_element) {
+  using it_t = typeof(this->in->begin());
+  this->test(std::max_element<it_t>, shad_test_stl::max_element_<it_t>);
+}
+
+TYPED_TEST(STF, minmax_element) {
+  using it_t = typeof(this->in->begin());
   this->test(std::minmax_element<it_t>, shad_test_stl::minmax_element_<it_t>);
 }

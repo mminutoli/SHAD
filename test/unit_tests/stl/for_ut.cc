@@ -22,44 +22,147 @@
 //
 //===----------------------------------------------------------------------===//
 
+#include <array>
+#include <set>
 #include <unordered_map>
 #include <vector>
 
 #include "gtest/gtest.h"
 
+#include "shad/data_structures/array.h"
+
 #include "common.h"
 
+///////////////////////////////////////
+//
+// std::vector
+//
+///////////////////////////////////////
 template <typename T>
-using TF = shad_test_stl::TestFixture<T>;
+using VTF = shad_test_stl::VectorTestFixture<T>;
 
-using TestTypes = ::testing::Types<shad_test_stl::std_vector_t,
-                                   shad_test_stl::std_unordered_map_t,
-                                   shad_test_stl::std_set_t>;
-TYPED_TEST_CASE(TF, TestTypes);
+using VTF_TestTypes = ::testing::Types<std::vector<int>>;
+TYPED_TEST_CASE(VTF, VTF_TestTypes);
 
-TYPED_TEST(TF, for_deref) {
+TYPED_TEST(VTF, for_deref) {
   int64_t obs_checksum = 0;
-  for (auto it = this->in.begin(); it != this->in.end(); ++it)
-    obs_checksum += shad_test_stl::val_to_int_(*it);
-  ASSERT_EQ(obs_checksum,
-            shad_test_stl::expected_checksum<TypeParam>(this->kNumElements));
+  for (auto it = this->in->begin(); it != this->in->end(); ++it)
+    obs_checksum += *it;
+  ASSERT_EQ(obs_checksum, this->expected_checksum());
 }
 
-TYPED_TEST(TF, for_const_deref) {
+TYPED_TEST(VTF, for_const_deref) {
   int64_t obs_checksum = 0;
-  for (auto it = this->in.cbegin(); it != this->in.cend(); ++it)
-    obs_checksum += shad_test_stl::val_to_int_(*it);
-  ASSERT_EQ(obs_checksum,
-            shad_test_stl::expected_checksum<TypeParam>(this->kNumElements));
+  for (auto it = this->in->cbegin(); it != this->in->cend(); ++it)
+    obs_checksum += *it;
+  ASSERT_EQ(obs_checksum, this->expected_checksum());
 }
 
-TYPED_TEST(TF, for_inc_deref) {
+TYPED_TEST(VTF, for_inc_deref) {
   int64_t obs_checksum = 0;
-  auto it = this->in.begin();
-  while (it != this->in.cend())
-    obs_checksum += shad_test_stl::val_to_int_(*it++);
-  ASSERT_EQ(obs_checksum,
-            shad_test_stl::expected_checksum<TypeParam>(this->kNumElements));
+  auto it = this->in->cbegin();
+  while (it != this->in->cend()) obs_checksum += *it++;
+  ASSERT_EQ(obs_checksum, this->expected_checksum());
+}
+
+// todo test arrow dereferencing
+
+///////////////////////////////////////
+//
+// std::array, shad::array
+//
+///////////////////////////////////////
+template <typename T>
+using ATF = shad_test_stl::ArrayTestFixture<T>;
+
+using ATF_TestTypes =
+    ::testing::Types<std::array<int, shad_test_stl::kNumElements>,
+                     shad::array<int, shad_test_stl::kNumElements>>;
+TYPED_TEST_CASE(ATF, ATF_TestTypes);
+
+TYPED_TEST(ATF, for_deref) {
+  int64_t obs_checksum = 0;
+  for (auto it = this->in->begin(); it != this->in->end(); ++it)
+    obs_checksum += *it;
+  ASSERT_EQ(obs_checksum, this->expected_checksum());
+}
+
+TYPED_TEST(ATF, for_const_deref) {
+  int64_t obs_checksum = 0;
+  for (auto it = this->in->cbegin(); it != this->in->cend(); ++it)
+    obs_checksum += *it;
+  ASSERT_EQ(obs_checksum, this->expected_checksum());
+}
+
+TYPED_TEST(ATF, for_inc_deref) {
+  int64_t obs_checksum = 0;
+  auto it = this->in->cbegin();
+  while (it != this->in->cend()) obs_checksum += *it++;
+  ASSERT_EQ(obs_checksum, this->expected_checksum());
+}
+
+///////////////////////////////////////
+//
+// std::set
+//
+///////////////////////////////////////
+template <typename T>
+using STF = shad_test_stl::SetTestFixture<T>;
+
+using STF_TestTypes = ::testing::Types<std::set<int>>;
+TYPED_TEST_CASE(STF, STF_TestTypes);
+
+TYPED_TEST(STF, for_deref) {
+  int64_t obs_checksum = 0;
+  for (auto it = this->in->begin(); it != this->in->end(); ++it)
+    obs_checksum += *it;
+  ASSERT_EQ(obs_checksum, this->expected_checksum());
+}
+
+TYPED_TEST(STF, for_const_deref) {
+  int64_t obs_checksum = 0;
+  for (auto it = this->in->cbegin(); it != this->in->cend(); ++it)
+    obs_checksum += *it;
+  ASSERT_EQ(obs_checksum, this->expected_checksum());
+}
+
+TYPED_TEST(STF, for_inc_deref) {
+  int64_t obs_checksum = 0;
+  auto it = this->in->cbegin();
+  while (it != this->in->cend()) obs_checksum += *it++;
+  ASSERT_EQ(obs_checksum, this->expected_checksum());
+}
+
+///////////////////////////////////////
+//
+// std::unordered_map
+//
+///////////////////////////////////////
+template <typename T>
+using MTF = shad_test_stl::MapTestFixture<T>;
+
+using MTF_TestTypes = ::testing::Types<std::unordered_map<int, int>>;
+TYPED_TEST_CASE(MTF, MTF_TestTypes);
+
+TYPED_TEST(MTF, for_deref) {
+  int64_t obs_checksum = 0;
+  for (auto it = this->in->begin(); it != this->in->end(); ++it)
+    obs_checksum += (*it).second;
+  ASSERT_EQ(obs_checksum, this->expected_checksum());
+}
+
+TYPED_TEST(MTF, for_const_deref) {
+  int64_t obs_checksum = 0;
+  for (auto it = this->in->cbegin(); it != this->in->cend(); ++it)
+    obs_checksum += (*it).second;
+  ASSERT_EQ(obs_checksum, this->expected_checksum());
+}
+
+TYPED_TEST(MTF, for_inc_deref) {
+  int64_t obs_checksum = 0;
+  auto it = this->in->cbegin();
+  while (it != this->in->cend()) obs_checksum += (*it++).second;
+  ASSERT_EQ(obs_checksum, this->expected_checksum());
 }
 
 // todo test arrow dereferencing

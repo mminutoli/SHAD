@@ -22,42 +22,91 @@
 //
 //===----------------------------------------------------------------------===//
 
+#include <array>
 #include <numeric>
+#include <set>
+#include <vector>
 
 #include "gtest/gtest.h"
+
+#include "shad/data_structures/array.h"
 
 #include "common.h"
 #include "stl_emulation/numeric.h"
 
+///////////////////////////////////////
+//
+// std::vector
+//
+///////////////////////////////////////
 template <typename T>
-using TF = shad_test_stl::TestFixture<T>;
+using VTF = shad_test_stl::VectorTestFixture<T>;
 
-using TestTypes =
-    ::testing::Types<shad_test_stl::std_vector_t, shad_test_stl::std_set_t>;
-TYPED_TEST_CASE(TF, TestTypes);
+using VTF_TestTypes = ::testing::Types<std::vector<int>>;
+TYPED_TEST_CASE(VTF, VTF_TestTypes);
 
-///////////////////////////////////////
-//
-// accumulate
-//
-///////////////////////////////////////
-TYPED_TEST(TF, std_accumulate) {
-  using it_t = typeof(this->in.begin());
-  using val_t = typename TypeParam::iterator::value_type;
+TYPED_TEST(VTF, accumulate) {
+  using it_t = typeof(this->in->begin());
+  using val_t = typename TypeParam::value_type;
   this->test(std::accumulate<it_t, val_t>,
-             shad_test_stl::accumulate_<it_t, val_t>,
-             shad_test_stl::make_val<val_t>(0));
+             shad_test_stl::accumulate_<it_t, val_t>, 0);
 }
 
 #ifdef STD_REDUCE_TEST
+TYPED_TEST(VTF, std_reduce) {
+  using it_t = typeof(this->in->begin());
+  this->test(std::reduce<it_t>, shad_test_stl::reduce_<it_t>);
+}
+#endif
+
 ///////////////////////////////////////
 //
-// reduce
+// std::array, shad::array
 //
 ///////////////////////////////////////
-TYPED_TEST(TF, std_reduce) {
-  using it_t = typeof(this->in.begin());
-  using val_t = typeof(*this->in.begin());
+template <typename T>
+using ATF = shad_test_stl::ArrayTestFixture<T>;
+
+// todo add shad::array<int, shad_test_stl::kNumElements>
+using ATF_TestTypes =
+    ::testing::Types<std::array<int, shad_test_stl::kNumElements>>;
+TYPED_TEST_CASE(ATF, ATF_TestTypes);
+
+TYPED_TEST(ATF, accumulate) {
+  using it_t = typeof(this->in->begin());
+  using val_t = typename TypeParam::value_type;
+  this->test(std::accumulate<it_t, val_t>,
+             shad_test_stl::accumulate_<it_t, val_t>, 0);
+}
+
+#ifdef STD_REDUCE_TEST
+TYPED_TEST(ATF, std_reduce) {
+  using it_t = typeof(this->in->begin());
+  this->test(std::reduce<it_t>, shad_test_stl::reduce_<it_t>);
+}
+#endif
+
+///////////////////////////////////////
+//
+// std::set
+//
+///////////////////////////////////////
+template <typename T>
+using STF = shad_test_stl::SetTestFixture<T>;
+
+using STF_TestTypes = ::testing::Types<std::set<int>>;
+TYPED_TEST_CASE(STF, STF_TestTypes);
+
+TYPED_TEST(STF, accumulate) {
+  using it_t = typeof(this->in->begin());
+  using val_t = typename TypeParam::value_type;
+  this->test(std::accumulate<it_t, val_t>,
+             shad_test_stl::accumulate_<it_t, val_t>, 0);
+}
+
+#ifdef STD_REDUCE_TEST
+TYPED_TEST(STF, std_reduce) {
+  using it_t = typeof(this->in->begin());
   this->test(std::reduce<it_t>, shad_test_stl::reduce_<it_t>);
 }
 #endif
