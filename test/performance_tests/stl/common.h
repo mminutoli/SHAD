@@ -26,7 +26,6 @@
 #define TEST_UNIT_TESTS_STL_COMMON_HPP_
 
 #include <array>
-#include <map>
 #include <memory>
 #include <set>
 #include <unordered_map>
