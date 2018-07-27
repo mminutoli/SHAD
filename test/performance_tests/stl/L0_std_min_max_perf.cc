@@ -23,8 +23,13 @@
 //===----------------------------------------------------------------------===//
 
 #include <algorithm>
+#include <array>  //todo
+#include <set>
+#include <vector>
 
 #include <benchmark/benchmark.h>
+
+#include "shad/data_structures/array.h" //todo
 
 #include "common.h"
 
@@ -33,53 +38,58 @@
 // std::vector
 //
 ///////////////////////////////////////
-using VT = shad_test_stl::std_vector_t;
-
-BENCHMARK_TEMPLATE_DEFINE_F_(std_vector_min_element, VT) {
-  using it_t = typeof(this->in.begin());
+BENCHMARK_TEMPLATE_DEFINE_F(VectorPerf, std_vector_min_element,
+                            std::vector<int>)
+(benchmark::State& st) {
+  using it_t = typeof(this->in->begin());
   auto f = std::min_element<it_t>;
   this->run(st, f);
 }
-BENCHMARK_REGISTER_F_(std_vector_min_element)
+BENCHMARK_REGISTER_F_(VectorPerf, std_vector_min_element);
 
-BENCHMARK_TEMPLATE_DEFINE_F_(std_vector_max_element, VT) {
-  using it_t = typeof(this->in.begin());
+BENCHMARK_TEMPLATE_DEFINE_F(VectorPerf, std_vector_max_element,
+                            std::vector<int>)
+(benchmark::State& st) {
+  using it_t = typeof(this->in->begin());
   auto f = std::max_element<it_t>;
   this->run(st, f);
 }
-BENCHMARK_REGISTER_F_(std_vector_max_element)
+BENCHMARK_REGISTER_F_(VectorPerf, std_vector_max_element)
 
-BENCHMARK_TEMPLATE_DEFINE_F_(std_vector_minmax_element, VT) {
-  using it_t = typeof(this->in.begin());
+BENCHMARK_TEMPLATE_DEFINE_F(VectorPerf, std_vector_minmax_element,
+                            std::vector<int>)
+(benchmark::State& st) {
+  using it_t = typeof(this->in->begin());
   auto f = std::minmax_element<it_t>;
   this->run(st, f);
 }
-BENCHMARK_REGISTER_F_(std_vector_minmax_element)
+BENCHMARK_REGISTER_F_(VectorPerf, std_vector_minmax_element);
 
 ///////////////////////////////////////
 //
 // std::set
 //
 ///////////////////////////////////////
-using ST = shad_test_stl::std_set_t;
-
-BENCHMARK_TEMPLATE_DEFINE_F_(std_set_min_element, ST) {
-  using it_t = typeof(this->in.begin());
+BENCHMARK_TEMPLATE_DEFINE_F(SetPerf, std_set_min_element, std::set<int>)
+(benchmark::State& st) {
+  using it_t = typeof(this->in->begin());
   auto f = std::min_element<it_t>;
   this->run(st, f);
 }
-BENCHMARK_REGISTER_F_(std_set_min_element)
+BENCHMARK_REGISTER_F_(SetPerf, std_set_min_element)
 
-BENCHMARK_TEMPLATE_DEFINE_F_(std_set_max_element, ST) {
-  using it_t = typeof(this->in.begin());
+BENCHMARK_TEMPLATE_DEFINE_F(SetPerf, std_set_max_element, std::set<int>)
+(benchmark::State& st) {
+  using it_t = typeof(this->in->begin());
   auto f = std::max_element<it_t>;
   this->run(st, f);
 }
-BENCHMARK_REGISTER_F_(std_set_max_element)
+BENCHMARK_REGISTER_F_(SetPerf, std_set_max_element)
 
-BENCHMARK_TEMPLATE_DEFINE_F_(std_set_minmax_element, ST) {
-  using it_t = typeof(this->in.begin());
+BENCHMARK_TEMPLATE_DEFINE_F(SetPerf, std_set_minmax_element, std::set<int>)
+(benchmark::State& st) {
+  using it_t = typeof(this->in->begin());
   auto f = std::minmax_element<it_t>;
   this->run(st, f);
 }
-BENCHMARK_REGISTER_F_(std_set_minmax_element)
+BENCHMARK_REGISTER_F_(SetPerf, std_set_minmax_element)

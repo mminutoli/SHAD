@@ -23,8 +23,12 @@
 //===----------------------------------------------------------------------===//
 
 #include <algorithm>
+#include <array>  //todo
+#include <vector>
 
 #include <benchmark/benchmark.h>
+
+#include "shad/data_structures/array.h"  //todo
 
 #include "common.h"
 
@@ -33,24 +37,22 @@
 // std::vector
 //
 ///////////////////////////////////////
-using VT = shad_test_stl::std_vector_t;
-
 // transform
-BENCHMARK_TEMPLATE_DEFINE_F_(std_vector_transform, VT) {
-  using it_t = typeof(this->in.begin());
-  using val_t = typeof(*this->in.begin());
+BENCHMARK_TEMPLATE_DEFINE_F(VectorPerf, std_vector_transform, std::vector<int>)
+(benchmark::State& st) {
+  using it_t = typeof(this->in->begin());
+  using val_t = typeof(*this->in->begin());
   using unary_t = shad_test_stl::add_two<val_t>;
   auto f = std::transform<it_t, it_t, unary_t>;
   this->run_io(st, f, unary_t{});
 }
-BENCHMARK_REGISTER_F_(std_vector_transform);
+BENCHMARK_REGISTER_F_(VectorPerf, std_vector_transform);
 
 ///////////////////////////////////////
 //
 // std::set
 //
 ///////////////////////////////////////
-using ST = shad_test_stl::std_set_t;
 
 // transform - not supported
 
@@ -59,6 +61,5 @@ using ST = shad_test_stl::std_set_t;
 // std::unordered_map
 //
 ///////////////////////////////////////
-using UMT = shad_test_stl::std_unordered_map_t;
 
 // transform - not supported

@@ -22,9 +22,14 @@
 //
 //===----------------------------------------------------------------------===//
 
+#include <array>  //todo
 #include <numeric>
+#include <set>
+#include <vector>
 
 #include <benchmark/benchmark.h>
+
+#include "shad/data_structures/array.h"  //todo
 
 #include "common.h"
 
@@ -33,25 +38,25 @@
 // vector
 //
 ///////////////////////////////////////
-using VT = shad_test_stl::std_vector_t;
-
 // accumulate
-BENCHMARK_TEMPLATE_DEFINE_F_(std_vector_accumulate, VT) {
-  using it_t = typeof(this->in.begin());
-  using val_t = typename VT::iterator::value_type;
-  auto f = std::accumulate<it_t, val_t>;
+BENCHMARK_TEMPLATE_DEFINE_F(VectorPerf, std_vector_accumulate, std::vector<int>)
+(benchmark::State& st) {
+  using it_t = typeof(this->in->begin());
+  using value_t = typename std::vector<int>::iterator::value_type;
+  auto f = std::accumulate<it_t, value_t>;
   this->run(st, f, 0);
 }
-BENCHMARK_REGISTER_F_(std_vector_accumulate);
+BENCHMARK_REGISTER_F_(VectorPerf, std_vector_accumulate);
 
 #ifdef STD_REDUCE_TEST
 // reduce
-BENCHMARK_TEMPLATE_DEFINE_F_(std_vector_reduce, VT) {
-  using it_t = typeof(this->in.begin());
+BENCHMARK_TEMPLATE_DEFINE_F(VectorPerf, std_vector_reduce, std::vector<int>)
+(benchmark::State& st) {
+  using it_t = typeof(this->in->begin());
   auto f = std::reduce<it_t>;
   this->run(st, f);
 }
-BENCHMARK_REGISTER_F_(std_vector_reduce);
+BENCHMARK_REGISTER_F_(VectorPerf, std_vector_reduce);
 #endif
 
 ///////////////////////////////////////
@@ -59,23 +64,22 @@ BENCHMARK_REGISTER_F_(std_vector_reduce);
 // set
 //
 ///////////////////////////////////////
-using ST = shad_test_stl::std_set_t;
-
 // accumulate
-BENCHMARK_TEMPLATE_DEFINE_F_(std_set_accumulate, ST) {
-  using it_t = typeof(this->in.begin());
-  using val_t = typename ST::iterator::value_type;
-  auto f = std::accumulate<it_t, val_t>;
+BENCHMARK_TEMPLATE_DEFINE_F(SetPerf, std_set_accumulate, std::set<int>)
+(benchmark::State& st) {
+  using it_t = typeof(this->in->begin());
+  auto f = std::accumulate<it_t, int>;
   this->run(st, f, 0);
 }
-BENCHMARK_REGISTER_F_(std_set_accumulate);
+BENCHMARK_REGISTER_F_(SetPerf, std_set_accumulate);
 
 #ifdef STD_REDUCE_TEST
 // reduce
-BENCHMARK_TEMPLATE_DEFINE_F_(std_set_reduce, ST) {
-  using it_t = typeof(this->in.begin());
+BENCHMARK_TEMPLATE_DEFINE_F(SetPerf, std_set_reduce, std::set<int>)
+(benchmark::State& st) {
+  using it_t = typeof(this->in->begin());
   auto f = std::reduce<it_t>;
   this->run(st, f);
 }
-BENCHMARK_REGISTER_F_(std_set_reduce);
+BENCHMARK_REGISTER_F_(SetPerf, std_set_reduce);
 #endif
