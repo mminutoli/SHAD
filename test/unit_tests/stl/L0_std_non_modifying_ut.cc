@@ -182,6 +182,7 @@ TYPED_TEST(VTF, std_find_end) {
   s = shad_test_stl::create_vector_<TypeParam, false>{}(32);
   this->test(std::find_end<it_t, it_t>, shad_test_stl::find_end_<it_t, it_t>,
              s->begin(), s->end());
+  shad_test_stl::destroy_container_<TypeParam>{}(s);
 }
 
 // find_first_of
@@ -198,6 +199,7 @@ TYPED_TEST(VTF, std_find_first_of) {
   s = shad_test_stl::create_vector_<TypeParam, false>{}(32);
   this->test(std::find_first_of<it_t, it_t>,
              shad_test_stl::find_first_of_<it_t, it_t>, s->begin(), s->end());
+  shad_test_stl::destroy_container_<TypeParam>{}(s);
 }
 
 // adjacent_find
@@ -224,6 +226,7 @@ TYPED_TEST(VTF, std_search) {
   s = shad_test_stl::create_vector_<TypeParam, false>{}(32);
   this->test(std::search<it_t, it_t>, shad_test_stl::search_<it_t, it_t>,
              s->begin(), s->end());
+  shad_test_stl::destroy_container_<TypeParam>{}(s);
 }
 
 // search_n - todo
@@ -379,6 +382,7 @@ TYPED_TEST(ATF, std_find_end) {
   s = shad_test_stl::create_array_<typename res_t::element_type, false>{}();
   this->test(std::find_end<it_t, s_it_t>,
              shad_test_stl::find_end_<it_t, s_it_t>, s->begin(), s->end());
+  shad_test_stl::destroy_container_<typename res_t::element_type>{}(s);
 }
 
 // find_first_of
@@ -397,6 +401,7 @@ TYPED_TEST(ATF, std_find_first_of) {
   s = shad_test_stl::create_array_<typename res_t::element_type, false>{}();
   this->test(std::find_first_of<it_t, s_it_t>,
              shad_test_stl::find_first_of_<it_t, s_it_t>, s->begin(), s->end());
+  shad_test_stl::destroy_container_<typename res_t::element_type>{}(s);
 }
 
 // adjacent_find
@@ -425,6 +430,7 @@ TYPED_TEST(ATF, std_search) {
   s = shad_test_stl::create_array_<typename res_t::element_type, false>{}();
   this->test(std::search<it_t, s_it_t>, shad_test_stl::search_<it_t, s_it_t>,
              s->begin(), s->end());
+  shad_test_stl::destroy_container_<typename res_t::element_type>{}(s);
 }
 
 // search_n - todo
@@ -576,6 +582,7 @@ TYPED_TEST(STF, std_find_end) {
   s = shad_test_stl::create_set_<TypeParam, false>{}(32);
   this->test(std::find_end<it_t, it_t>, shad_test_stl::find_end_<it_t, it_t>,
              s->begin(), s->end());
+  shad_test_stl::destroy_container_<TypeParam>{}(s);
 }
 
 // find_first_of
@@ -592,6 +599,7 @@ TYPED_TEST(STF, std_find_first_of) {
   s = shad_test_stl::create_set_<TypeParam, false>{}(32);
   this->test(std::find_first_of<it_t, it_t>,
              shad_test_stl::find_first_of_<it_t, it_t>, s->begin(), s->end());
+  shad_test_stl::destroy_container_<TypeParam>{}(s);
 }
 
 // adjacent_find
@@ -618,6 +626,7 @@ TYPED_TEST(STF, std_search) {
   s = shad_test_stl::create_set_<TypeParam, false>{}(32);
   this->test(std::search<it_t, it_t>, shad_test_stl::search_<it_t, it_t>,
              s->begin(), s->end());
+  shad_test_stl::destroy_container_<TypeParam>{}(s);
 }
 
 // search_n - todo
@@ -771,6 +780,7 @@ TYPED_TEST(MTF, std_find_end) {
   s = shad_test_stl::create_map_<TypeParam, false>{}(32);
   this->test(std::find_end<it_t, it_t>, shad_test_stl::find_end_<it_t, it_t>,
              s->begin(), s->end());
+  shad_test_stl::destroy_container_<TypeParam>{}(s);
 }
 
 // find_first_of
@@ -787,6 +797,7 @@ TYPED_TEST(MTF, std_find_first_of) {
   s = shad_test_stl::create_map_<TypeParam, false>{}(32);
   this->test(std::find_first_of<it_t, it_t>,
              shad_test_stl::find_first_of_<it_t, it_t>, s->begin(), s->end());
+  shad_test_stl::destroy_container_<TypeParam>{}(s);
 }
 
 // adjacent_find
@@ -813,6 +824,7 @@ TYPED_TEST(MTF, std_search) {
   s = shad_test_stl::create_map_<TypeParam, false>{}(32);
   this->test(std::search<it_t, it_t>, shad_test_stl::search_<it_t, it_t>,
              s->begin(), s->end());
+  shad_test_stl::destroy_container_<TypeParam>{}(s);
 }
 
 // search_n - todo
