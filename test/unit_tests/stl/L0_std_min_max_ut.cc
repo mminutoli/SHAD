@@ -68,9 +68,9 @@ TYPED_TEST(VTF, minmax_element) {
 template <typename T>
 using ATF = shad_test_stl::ArrayTestFixture<T>;
 
-// todo shad::array<int, shad_test_stl::kNumElements>
 using ATF_TestTypes =
-    ::testing::Types<std::array<int, shad_test_stl::kNumElements>>;
+    ::testing::Types<std::array<int, shad_test_stl::kNumElements>,
+                     shad::array<int, shad_test_stl::kNumElements>>;
 TYPED_TEST_CASE(ATF, ATF_TestTypes);
 
 TYPED_TEST(ATF, min_element) {

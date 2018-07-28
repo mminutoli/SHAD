@@ -129,7 +129,7 @@ struct destroy_container_<shad::array<U, size>> {
   void operator()(std::shared_ptr<T> c) { T::Destroy(c.get()->GetGlobalID()); }
 };
 
-// sub-sequencing from containers
+// sub-sequencing from dynamic-size containers
 template <typename T>
 typename T::iterator it_seek_(std::shared_ptr<T> in, size_t start_idx) {
   auto first = in->begin();
@@ -165,38 +165,6 @@ struct subseq_from_<std::vector<U>> {
   }
 };
 
-template <typename U, size_t size>
-struct subseq_from_<std::array<U, size>> {
-  using T = std::array<U, size>;
-  std::shared_ptr<T> operator()(std::shared_ptr<T> in, size_t start_idx,
-                                size_t len) {
-    assert(start_idx < size);
-    auto first = it_seek_(in, start_idx);
-    auto res = std::make_shared<T>();
-    for (size_t i = 0; i < len; ++i) {
-      assert(first != in->end());
-      res->at(i) = *first++;
-    }
-    return res;
-  }
-};
-
-template <typename U, size_t size>
-struct subseq_from_<shad::array<U, size>> {
-  using T = shad::array<U, size>;
-  std::shared_ptr<T> operator()(std::shared_ptr<T> in, size_t start_idx,
-                                size_t len) {
-    assert(start_idx < size);
-    auto first = it_seek(in, start_idx);
-    auto res = T::Create();
-    for (size_t i = 0; i < len; ++i) {
-      assert(first != in->end());
-      res->at(i) = *first++;
-    }
-    return res;
-  }
-};
-
 template <typename U>
 struct subseq_from_<std::set<U>> {
   using T = std::set<U>;
@@ -226,6 +194,47 @@ struct subseq_from_<std::unordered_map<U, V>> {
       assert(first != in->end());
       res->operator[]((*first).first) = (*first).second;
       ++first;
+    }
+    return res;
+  }
+};
+
+// sub-sequencing from static-size containers
+template <typename T, size_t size_>
+struct static_subseq_from_ {
+  using T_ = std::array<typename T::value_type, size_>;
+  std::shared_ptr<T_> operator()(std::shared_ptr<T> in, size_t start_idx) {
+    return nullptr;
+  }
+};
+
+template <typename U, size_t size, size_t size_>
+struct static_subseq_from_<std::array<U, size>, size_> {
+  using T = std::array<U, size>;
+  using T_ = std::array<U, size_>;
+  std::shared_ptr<T_> operator()(std::shared_ptr<T> in, size_t start_idx) {
+    assert(start_idx < size);
+    auto first = it_seek_(in, start_idx);
+    auto res = std::make_shared<T_>();
+    for (size_t i = 0; i < size_; ++i) {
+      assert(first != in->end());
+      res->at(i) = *first++;
+    }
+    return res;
+  }
+};
+
+template <typename U, size_t size, size_t size_>
+struct static_subseq_from_<shad::array<U, size>, size_> {
+  using T = shad::array<U, size>;
+  using T_ = shad::array<U, size_>;
+  std::shared_ptr<T_> operator()(std::shared_ptr<T> in, size_t start_idx) {
+    assert(start_idx < size);
+    auto first = it_seek_(in, start_idx);
+    auto res = T_::Create();
+    for (size_t i = 0; i < size_; ++i) {
+      assert(first != in->end());
+      res->at(i) = *first++;
     }
     return res;
   }

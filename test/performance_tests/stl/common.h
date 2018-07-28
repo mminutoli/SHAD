@@ -187,7 +187,7 @@ struct subseq_from_<shad::array<U, size>> {
   std::shared_ptr<T> operator()(std::shared_ptr<T> in, size_t start_idx,
                                 size_t len) {
     assert(start_idx < size);
-    auto first = it_seek(in, start_idx);
+    auto first = it_seek_(in, start_idx);
     auto res = T::Create();
     for (size_t i = 0; i < len; ++i) {
       assert(first != in->end());

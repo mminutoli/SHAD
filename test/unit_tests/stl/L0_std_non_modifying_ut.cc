@@ -30,7 +30,7 @@
 
 #include "gtest/gtest.h"
 
-#include "shad/data_structures/array.h"  //todo
+#include "shad/data_structures/array.h"
 
 #include "common.h"
 #include "stl_emulation/algorithm.h"
@@ -49,7 +49,7 @@ TYPED_TEST_CASE(VTF, VTF_TestTypes);
 // find_if, find_if_not
 TYPED_TEST(VTF, std_find_if) {
   using it_t = typeof(this->in->begin());
-  using value_t = typeof(*this->in->begin());
+  using value_t = typename TypeParam::value_type;
 
   // found
   this->test(std::find_if<it_t, shad_test_stl::is_even<value_t>>,
@@ -64,7 +64,7 @@ TYPED_TEST(VTF, std_find_if) {
 
 TYPED_TEST(VTF, std_find_if_not) {
   using it_t = typeof(this->in->begin());
-  using value_t = typeof(*this->in->begin());
+  using value_t = typename TypeParam::value_type;
 
   // not found
   this->test(std::find_if_not<it_t, shad_test_stl::is_even<value_t>>,
@@ -80,7 +80,7 @@ TYPED_TEST(VTF, std_find_if_not) {
 // all_of, any_of, none_of
 TYPED_TEST(VTF, std_all_of) {
   using it_t = typeof(this->in->begin());
-  using value_t = typeof(*this->in->begin());
+  using value_t = typename TypeParam::value_type;
 
   // true
   this->test(std::all_of<it_t, shad_test_stl::is_even<value_t>>,
@@ -95,7 +95,7 @@ TYPED_TEST(VTF, std_all_of) {
 
 TYPED_TEST(VTF, std_any_of) {
   using it_t = typeof(this->in->begin());
-  using value_t = typeof(*this->in->begin());
+  using value_t = typename TypeParam::value_type;
 
   // true
   this->test(std::any_of<it_t, shad_test_stl::is_even<value_t>>,
@@ -110,7 +110,7 @@ TYPED_TEST(VTF, std_any_of) {
 
 TYPED_TEST(VTF, std_none_of) {
   using it_t = typeof(this->in->begin());
-  using value_t = typeof(*this->in->begin());
+  using value_t = typename TypeParam::value_type;
 
   // false
   this->test(std::none_of<it_t, shad_test_stl::is_even<value_t>>,
@@ -128,7 +128,7 @@ TYPED_TEST(VTF, std_none_of) {
 // count, count_if
 TYPED_TEST(VTF, std_count) {
   using it_t = typeof(this->in->begin());
-  using value_t = typeof(*this->in->begin());
+  using value_t = typename TypeParam::value_type;
 
   // occurring
   this->test(std::count<it_t, value_t>, shad_test_stl::count_<it_t, value_t>,
@@ -141,7 +141,7 @@ TYPED_TEST(VTF, std_count) {
 
 TYPED_TEST(VTF, std_count_if) {
   using it_t = typeof(this->in->begin());
-  using value_t = typeof(*this->in->begin());
+  using value_t = typename TypeParam::value_type;
 
   // all
   this->test(std::count_if<it_t, shad_test_stl::is_even<value_t>>,
@@ -159,7 +159,7 @@ TYPED_TEST(VTF, std_count_if) {
 // find
 TYPED_TEST(VTF, std_find) {
   using it_t = typeof(this->in->begin());
-  using value_t = typeof(*this->in->begin());
+  using value_t = typename TypeParam::value_type;
 
   // occurring
   this->test(std::find<it_t, value_t>, shad_test_stl::find_<it_t, value_t>, 0);
@@ -236,15 +236,15 @@ TYPED_TEST(VTF, std_search) {
 template <typename T>
 using ATF = shad_test_stl::ArrayTestFixture<T>;
 
-// todo shad::array<int, shad_test_stl::kNumElements>
 using ATF_TestTypes =
-    ::testing::Types<std::array<int, shad_test_stl::kNumElements>>;
+    ::testing::Types<std::array<int, shad_test_stl::kNumElements>,
+                     shad::array<int, shad_test_stl::kNumElements>>;
 TYPED_TEST_CASE(ATF, ATF_TestTypes);
 
 // find_if, find_if_not
 TYPED_TEST(ATF, std_find_if) {
   using it_t = typeof(this->in->begin());
-  using value_t = typeof(*this->in->begin());
+  using value_t = typename TypeParam::value_type;
 
   // found
   this->test(std::find_if<it_t, shad_test_stl::is_even<value_t>>,
@@ -259,7 +259,7 @@ TYPED_TEST(ATF, std_find_if) {
 
 TYPED_TEST(ATF, std_find_if_not) {
   using it_t = typeof(this->in->begin());
-  using value_t = typeof(*this->in->begin());
+  using value_t = typename TypeParam::value_type;
 
   // not found
   this->test(std::find_if_not<it_t, shad_test_stl::is_even<value_t>>,
@@ -275,7 +275,7 @@ TYPED_TEST(ATF, std_find_if_not) {
 // all_of, any_of, none_of
 TYPED_TEST(ATF, std_all_of) {
   using it_t = typeof(this->in->begin());
-  using value_t = typeof(*this->in->begin());
+  using value_t = typename TypeParam::value_type;
 
   // true
   this->test(std::all_of<it_t, shad_test_stl::is_even<value_t>>,
@@ -290,7 +290,7 @@ TYPED_TEST(ATF, std_all_of) {
 
 TYPED_TEST(ATF, std_any_of) {
   using it_t = typeof(this->in->begin());
-  using value_t = typeof(*this->in->begin());
+  using value_t = typename TypeParam::value_type;
 
   // true
   this->test(std::any_of<it_t, shad_test_stl::is_even<value_t>>,
@@ -305,7 +305,7 @@ TYPED_TEST(ATF, std_any_of) {
 
 TYPED_TEST(ATF, std_none_of) {
   using it_t = typeof(this->in->begin());
-  using value_t = typeof(*this->in->begin());
+  using value_t = typename TypeParam::value_type;
 
   // false
   this->test(std::none_of<it_t, shad_test_stl::is_even<value_t>>,
@@ -323,7 +323,7 @@ TYPED_TEST(ATF, std_none_of) {
 // count, count_if
 TYPED_TEST(ATF, std_count) {
   using it_t = typeof(this->in->begin());
-  using value_t = typeof(*this->in->begin());
+  using value_t = typename TypeParam::value_type;
 
   // occurring
   this->test(std::count<it_t, value_t>, shad_test_stl::count_<it_t, value_t>,
@@ -336,7 +336,7 @@ TYPED_TEST(ATF, std_count) {
 
 TYPED_TEST(ATF, std_count_if) {
   using it_t = typeof(this->in->begin());
-  using value_t = typeof(*this->in->begin());
+  using value_t = typename TypeParam::value_type;
 
   // all
   this->test(std::count_if<it_t, shad_test_stl::is_even<value_t>>,
@@ -354,7 +354,7 @@ TYPED_TEST(ATF, std_count_if) {
 // find
 TYPED_TEST(ATF, std_find) {
   using it_t = typeof(this->in->begin());
-  using value_t = typeof(*this->in->begin());
+  using value_t = typename TypeParam::value_type;
 
   // occurring
   this->test(std::find<it_t, value_t>, shad_test_stl::find_<it_t, value_t>, 0);
@@ -368,15 +368,17 @@ TYPED_TEST(ATF, std_find_end) {
   using it_t = typeof(this->in->begin());
 
   // occurring
-  auto s = shad_test_stl::subseq_from_<TypeParam>{}(
-      this->in, shad_test_stl::kNumElements - 32, 32);
-  this->test(std::find_end<it_t, it_t>, shad_test_stl::find_end_<it_t, it_t>,
-             s->begin(), s->end());
+  auto s = shad_test_stl::static_subseq_from_<TypeParam, 32>{}(
+      this->in, shad_test_stl::kNumElements - 32);
+  using s_it_t = typeof(s->begin());
+  this->test(std::find_end<it_t, s_it_t>,
+             shad_test_stl::find_end_<it_t, s_it_t>, s->begin(), s->end());
 
   // not occurring
-  s = shad_test_stl::create_array_<TypeParam, false>{}();
-  this->test(std::find_end<it_t, it_t>, shad_test_stl::find_end_<it_t, it_t>,
-             s->begin(), s->end());
+  using res_t = typeof(s);
+  s = shad_test_stl::create_array_<typename res_t::element_type, false>{}();
+  this->test(std::find_end<it_t, s_it_t>,
+             shad_test_stl::find_end_<it_t, s_it_t>, s->begin(), s->end());
 }
 
 // find_first_of
@@ -384,15 +386,17 @@ TYPED_TEST(ATF, std_find_first_of) {
   using it_t = typeof(this->in->begin());
 
   // occurring
-  auto s = shad_test_stl::subseq_from_<TypeParam>{}(
-      this->in, shad_test_stl::kNumElements - 32, 32);
-  this->test(std::find_first_of<it_t, it_t>,
-             shad_test_stl::find_first_of_<it_t, it_t>, s->begin(), s->end());
+  auto s = shad_test_stl::static_subseq_from_<TypeParam, 32>{}(
+      this->in, shad_test_stl::kNumElements - 32);
+  using s_it_t = typeof(s->begin());
+  this->test(std::find_first_of<it_t, s_it_t>,
+             shad_test_stl::find_first_of_<it_t, s_it_t>, s->begin(), s->end());
 
   // not occurring
-  s = shad_test_stl::create_array_<TypeParam, false>{}();
-  this->test(std::find_first_of<it_t, it_t>,
-             shad_test_stl::find_first_of_<it_t, it_t>, s->begin(), s->end());
+  using res_t = typeof(s);
+  s = shad_test_stl::create_array_<typename res_t::element_type, false>{}();
+  this->test(std::find_first_of<it_t, s_it_t>,
+             shad_test_stl::find_first_of_<it_t, s_it_t>, s->begin(), s->end());
 }
 
 // adjacent_find
@@ -410,14 +414,16 @@ TYPED_TEST(ATF, std_search) {
   using it_t = typeof(this->in->begin());
 
   // occurring
-  auto s = shad_test_stl::subseq_from_<TypeParam>{}(
-      this->in, shad_test_stl::kNumElements - 32, 32);
-  this->test(std::search<it_t, it_t>, shad_test_stl::search_<it_t, it_t>,
+  auto s = shad_test_stl::static_subseq_from_<TypeParam, 32>{}(
+      this->in, shad_test_stl::kNumElements - 32);
+  using s_it_t = typeof(s->begin());
+  this->test(std::search<it_t, s_it_t>, shad_test_stl::search_<it_t, s_it_t>,
              s->begin(), s->end());
 
   // not occurring
-  s = shad_test_stl::create_array_<TypeParam, false>{}();
-  this->test(std::search<it_t, it_t>, shad_test_stl::search_<it_t, it_t>,
+  using res_t = typeof(s);
+  s = shad_test_stl::create_array_<typename res_t::element_type, false>{}();
+  this->test(std::search<it_t, s_it_t>, shad_test_stl::search_<it_t, s_it_t>,
              s->begin(), s->end());
 }
 
@@ -437,7 +443,7 @@ TYPED_TEST_CASE(STF, STF_TestTypes);
 // find_if, find_if_not
 TYPED_TEST(STF, std_find_if) {
   using it_t = typeof(this->in->begin());
-  using value_t = typeof(*this->in->begin());
+  using value_t = typename TypeParam::value_type;
 
   // found
   this->test(std::find_if<it_t, shad_test_stl::is_even<value_t>>,
@@ -452,7 +458,7 @@ TYPED_TEST(STF, std_find_if) {
 
 TYPED_TEST(STF, std_find_if_not) {
   using it_t = typeof(this->in->begin());
-  using value_t = typeof(*this->in->begin());
+  using value_t = typename TypeParam::value_type;
 
   // not found
   this->test(std::find_if_not<it_t, shad_test_stl::is_even<value_t>>,
@@ -468,7 +474,7 @@ TYPED_TEST(STF, std_find_if_not) {
 // all_of, any_of, none_of
 TYPED_TEST(STF, std_all_of) {
   using it_t = typeof(this->in->begin());
-  using value_t = typeof(*this->in->begin());
+  using value_t = typename TypeParam::value_type;
 
   // true
   this->test(std::all_of<it_t, shad_test_stl::is_even<value_t>>,
@@ -483,7 +489,7 @@ TYPED_TEST(STF, std_all_of) {
 
 TYPED_TEST(STF, std_any_of) {
   using it_t = typeof(this->in->begin());
-  using value_t = typeof(*this->in->begin());
+  using value_t = typename TypeParam::value_type;
 
   // true
   this->test(std::any_of<it_t, shad_test_stl::is_even<value_t>>,
@@ -498,7 +504,7 @@ TYPED_TEST(STF, std_any_of) {
 
 TYPED_TEST(STF, std_none_of) {
   using it_t = typeof(this->in->begin());
-  using value_t = typeof(*this->in->begin());
+  using value_t = typename TypeParam::value_type;
 
   // false
   this->test(std::none_of<it_t, shad_test_stl::is_even<value_t>>,
@@ -516,7 +522,7 @@ TYPED_TEST(STF, std_none_of) {
 // count, count_if
 TYPED_TEST(STF, std_count) {
   using it_t = typeof(this->in->begin());
-  using value_t = typeof(*this->in->begin());
+  using value_t = typename TypeParam::value_type;
 
   // occurring
   this->test(std::count<it_t, value_t>, shad_test_stl::count_<it_t, value_t>,
@@ -529,7 +535,7 @@ TYPED_TEST(STF, std_count) {
 
 TYPED_TEST(STF, std_count_if) {
   using it_t = typeof(this->in->begin());
-  using value_t = typeof(*this->in->begin());
+  using value_t = typename TypeParam::value_type;
 
   // all
   this->test(std::count_if<it_t, shad_test_stl::is_even<value_t>>,
@@ -547,7 +553,7 @@ TYPED_TEST(STF, std_count_if) {
 // find
 TYPED_TEST(STF, std_find) {
   using it_t = typeof(this->in->begin());
-  using value_t = typeof(*this->in->begin());
+  using value_t = typename TypeParam::value_type;
 
   // occurring
   this->test(std::find<it_t, value_t>, shad_test_stl::find_<it_t, value_t>, 0);
@@ -630,7 +636,7 @@ TYPED_TEST_CASE(MTF, MTF_TestTypes);
 // find_if, find_if_not
 TYPED_TEST(MTF, std_find_if) {
   using it_t = typeof(this->in->begin());
-  using value_t = typeof(*this->in->begin());
+  using value_t = typename TypeParam::value_type;
 
   // found
   this->test(std::find_if<it_t, shad_test_stl::is_even<value_t>>,
@@ -645,7 +651,7 @@ TYPED_TEST(MTF, std_find_if) {
 
 TYPED_TEST(MTF, std_find_if_not) {
   using it_t = typeof(this->in->begin());
-  using value_t = typeof(*this->in->begin());
+  using value_t = typename TypeParam::value_type;
 
   // not found
   this->test(std::find_if_not<it_t, shad_test_stl::is_even<value_t>>,
@@ -661,7 +667,7 @@ TYPED_TEST(MTF, std_find_if_not) {
 // all_of, any_of, none_of
 TYPED_TEST(MTF, std_all_of) {
   using it_t = typeof(this->in->begin());
-  using value_t = typeof(*this->in->begin());
+  using value_t = typename TypeParam::value_type;
 
   // true
   this->test(std::all_of<it_t, shad_test_stl::is_even<value_t>>,
@@ -676,7 +682,7 @@ TYPED_TEST(MTF, std_all_of) {
 
 TYPED_TEST(MTF, std_any_of) {
   using it_t = typeof(this->in->begin());
-  using value_t = typeof(*this->in->begin());
+  using value_t = typename TypeParam::value_type;
 
   // true
   this->test(std::any_of<it_t, shad_test_stl::is_even<value_t>>,
@@ -691,7 +697,7 @@ TYPED_TEST(MTF, std_any_of) {
 
 TYPED_TEST(MTF, std_none_of) {
   using it_t = typeof(this->in->begin());
-  using value_t = typeof(*this->in->begin());
+  using value_t = typename TypeParam::value_type;
 
   // false
   this->test(std::none_of<it_t, shad_test_stl::is_even<value_t>>,
@@ -709,7 +715,7 @@ TYPED_TEST(MTF, std_none_of) {
 // count, count_if
 TYPED_TEST(MTF, std_count) {
   using it_t = typeof(this->in->begin());
-  using value_t = typeof(*this->in->begin());
+  using value_t = typename TypeParam::value_type;
 
   // occurring
   this->test(std::count<it_t, value_t>, shad_test_stl::count_<it_t, value_t>,
@@ -722,7 +728,7 @@ TYPED_TEST(MTF, std_count) {
 
 TYPED_TEST(MTF, std_count_if) {
   using it_t = typeof(this->in->begin());
-  using value_t = typeof(*this->in->begin());
+  using value_t = typename TypeParam::value_type;
 
   // all
   this->test(std::count_if<it_t, shad_test_stl::is_even<value_t>>,
@@ -740,7 +746,7 @@ TYPED_TEST(MTF, std_count_if) {
 // find
 TYPED_TEST(MTF, std_find) {
   using it_t = typeof(this->in->begin());
-  using value_t = typeof(*this->in->begin());
+  using value_t = typename TypeParam::value_type;
 
   // occurring
   this->test(std::find<it_t, value_t>, shad_test_stl::find_<it_t, value_t>,
