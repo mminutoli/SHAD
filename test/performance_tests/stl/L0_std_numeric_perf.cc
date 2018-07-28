@@ -61,6 +61,64 @@ BENCHMARK_REGISTER_F_(VectorPerf, std_vector_reduce);
 
 ///////////////////////////////////////
 //
+// shad::array - min size
+//
+///////////////////////////////////////
+using shad_array_t_s0 = shad::array<int, shad_test_stl::BENCHMARK_MIN_SIZE>;
+
+BENCHMARK_TEMPLATE_DEFINE_F(ArrayPerf, shad_array_accumulate_s0,
+                            shad_array_t_s0)
+(benchmark::State& st) {
+  using it_t = typeof(this->in->begin());
+  using value_t = typename std::vector<int>::iterator::value_type;
+  auto f = std::accumulate<it_t, value_t>;
+  this->run(st, f, 0);
+}
+BENCHMARK_REGISTER_F(ArrayPerf, shad_array_accumulate_s0)
+    ->Arg(shad_test_stl::BENCHMARK_MIN_SIZE);
+
+#ifdef STD_REDUCE_TEST
+BENCHMARK_TEMPLATE_DEFINE_F(ArrayPerf, shad_array_reduce_s0, shad_array_t_s0)
+(benchmark::State& st) {
+  using it_t = typeof(this->in->begin());
+  auto f = std::reduce<it_t>;
+  this->run(st, f);
+}
+BENCHMARK_REGISTER_F(ArrayPerf, shad_array_reduce_s0)
+    ->Arg(shad_test_stl::BENCHMARK_MIN_SIZE);
+#endif
+
+///////////////////////////////////////
+//
+// shad::array - max size
+//
+///////////////////////////////////////
+using shad_array_t_s1 = shad::array<int, shad_test_stl::BENCHMARK_MAX_SIZE>;
+
+BENCHMARK_TEMPLATE_DEFINE_F(ArrayPerf, shad_array_accumulate_s1,
+                            shad_array_t_s1)
+(benchmark::State& st) {
+  using it_t = typeof(this->in->begin());
+  using value_t = typename std::vector<int>::iterator::value_type;
+  auto f = std::accumulate<it_t, value_t>;
+  this->run(st, f, 0);
+}
+BENCHMARK_REGISTER_F(ArrayPerf, shad_array_accumulate_s1)
+    ->Arg(shad_test_stl::BENCHMARK_MAX_SIZE);
+
+#ifdef STD_REDUCE_TEST
+BENCHMARK_TEMPLATE_DEFINE_F(ArrayPerf, shad_array_reduce_s1, shad_array_t_s1)
+(benchmark::State& st) {
+  using it_t = typeof(this->in->begin());
+  auto f = std::reduce<it_t>;
+  this->run(st, f);
+}
+BENCHMARK_REGISTER_F(ArrayPerf, shad_array_reduce_s1)
+    ->Arg(shad_test_stl::BENCHMARK_MAX_SIZE);
+#endif
+
+///////////////////////////////////////
+//
 // set
 //
 ///////////////////////////////////////
