@@ -70,7 +70,7 @@ BENCHMARK_REGISTER_F_(VectorPerf, std_vector_minmax_element);
 // shad::array - min size
 //
 ///////////////////////////////////////
-using shad_array_t_s0 = shad::array<int, shad_test_stl::BENCHMARK_MAX_SIZE>;
+using shad_array_t_s0 = shad::array<int, shad_test_stl::BENCHMARK_MIN_SIZE>;
 
 BENCHMARK_TEMPLATE_DEFINE_F(ArrayPerf, shad_array_min_element_s0,
                             shad_array_t_s0)
@@ -78,7 +78,7 @@ BENCHMARK_TEMPLATE_DEFINE_F(ArrayPerf, shad_array_min_element_s0,
   this->run(st, std::min_element<typeof(this->in->begin())>);
 }
 BENCHMARK_REGISTER_F(ArrayPerf, shad_array_min_element_s0)
-    ->Arg(shad_test_stl::BENCHMARK_MAX_SIZE);
+    ->Arg(shad_test_stl::BENCHMARK_MIN_SIZE);
 
 BENCHMARK_TEMPLATE_DEFINE_F(ArrayPerf, shad_array_max_element_s0,
                             shad_array_t_s0)
@@ -86,7 +86,7 @@ BENCHMARK_TEMPLATE_DEFINE_F(ArrayPerf, shad_array_max_element_s0,
   this->run(st, std::max_element<typeof(this->in->begin())>);
 }
 BENCHMARK_REGISTER_F(ArrayPerf, shad_array_max_element_s0)
-    ->Arg(shad_test_stl::BENCHMARK_MAX_SIZE);
+    ->Arg(shad_test_stl::BENCHMARK_MIN_SIZE);
 
 BENCHMARK_TEMPLATE_DEFINE_F(ArrayPerf, shad_array_minmax_element_s0,
                             shad_array_t_s0)
@@ -94,7 +94,7 @@ BENCHMARK_TEMPLATE_DEFINE_F(ArrayPerf, shad_array_minmax_element_s0,
   this->run(st, std::minmax_element<typeof(this->in->begin())>);
 }
 BENCHMARK_REGISTER_F(ArrayPerf, shad_array_minmax_element_s0)
-    ->Arg(shad_test_stl::BENCHMARK_MAX_SIZE);
+    ->Arg(shad_test_stl::BENCHMARK_MIN_SIZE);
 
 ///////////////////////////////////////
 //
