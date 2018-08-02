@@ -28,7 +28,7 @@
 
 #include "benchmark/benchmark.h"
 
-#include "shad/data_structures/array.h"  //todo
+#include "shad/data_structures/array.h"
 
 #include "common.h"
 
@@ -46,6 +46,8 @@ BENCHMARK_TEMPLATE_DEFINE_F(VectorPerf, std_vector_transform, std::vector<int>)
   this->run_io(st, f, unary_t{});
 }
 BENCHMARK_REGISTER_F_(VectorPerf, std_vector_transform);
+
+// todo std::array
 
 ///////////////////////////////////////
 //

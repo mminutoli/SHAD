@@ -30,7 +30,7 @@
 
 #include "benchmark/benchmark.h"
 
-#include "shad/data_structures/array.h"  //todo
+#include "shad/data_structures/array.h"
 
 #include "common.h"
 
@@ -131,6 +131,8 @@ BENCHMARK_TEMPLATE_DEFINE_F(VectorPerf, std_vector_adjacent_find,
 BENCHMARK_REGISTER_F_(VectorPerf, std_vector_adjacent_find);
 
 // todo search, search_n
+
+// todo std::array
 
 ///////////////////////////////////////
 //

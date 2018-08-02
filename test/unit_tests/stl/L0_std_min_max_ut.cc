@@ -29,7 +29,7 @@
 
 #include "gtest/gtest.h"
 
-#include "shad/data_structures/array.h"  //todo
+#include "shad/data_structures/array.h"
 
 #include "common.h"
 #include "stl_emulation/algorithm.h"

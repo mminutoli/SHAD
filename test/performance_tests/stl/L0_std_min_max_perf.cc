@@ -23,7 +23,7 @@
 //===----------------------------------------------------------------------===//
 
 #include <algorithm>
-#include <array>  //todo
+#include <array>
 #include <set>
 #include <vector>
 
@@ -64,6 +64,8 @@ BENCHMARK_TEMPLATE_DEFINE_F(VectorPerf, std_vector_minmax_element,
   this->run(st, f);
 }
 BENCHMARK_REGISTER_F_(VectorPerf, std_vector_minmax_element);
+
+// todo std::array
 
 ///////////////////////////////////////
 //

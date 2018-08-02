@@ -29,7 +29,7 @@
 
 #include "gtest/gtest.h"
 
-#include "shad/data_structures/array.h"  //todo
+#include "shad/data_structures/array.h"
 
 #include "common.h"
 #include "stl_emulation/numeric.h"
@@ -67,7 +67,6 @@ TYPED_TEST(VTF, std_reduce) {
 template <typename T>
 using ATF = shad_test_stl::ArrayTestFixture<T>;
 
-// todo shad::array<int, shad_test_stl::kNumElements>
 using ATF_TestTypes =
     ::testing::Types<std::array<int, shad_test_stl::kNumElements>,
                      shad::array<int, shad_test_stl::kNumElements>>;
