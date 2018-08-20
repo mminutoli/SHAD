@@ -60,7 +60,7 @@ TEST_F(AlgorithmsTest, find) {
 }
 
 TEST_F(AlgorithmsTest, find_if) {
-  using value_type = typename std::array<size_t, 10001>::value_type;
+  using value_type = typename shad::array<size_t, 10001>::value_type;
   auto equal_to_zero = [](const value_type& v) -> bool { return v == 0; };
   auto res = shad::find_if(shad::distributed_parallel_tag{}, array_->begin(),
                            array_->end(), equal_to_zero);
@@ -86,11 +86,11 @@ TEST_F(AlgorithmsTest, find_if) {
 }
 
 TEST_F(AlgorithmsTest, for_each) {
-  using value_type = typename std::array<size_t, 10001>::value_type;
-  using reference = typename std::array<size_t, 10001>::reference;
+  using value_type = typename shad::array<size_t, 10001>::value_type;
+  using reference = typename shad::array<size_t, 10001>::reference;
 
   shad::for_each(shad::distributed_sequential_tag{}, array_->begin(),
-                 array_->end(), [](reference& v) { v += 1; });
+                 array_->end(), [](value_type& v) { v += 1; });
 
   auto res = shad::find_if(shad::distributed_parallel_tag{}, array_->begin(),
                            array_->end(),
@@ -99,7 +99,7 @@ TEST_F(AlgorithmsTest, for_each) {
   ASSERT_EQ(res, array_->end());
 
   shad::for_each(shad::distributed_parallel_tag{}, array_->begin(),
-                 array_->end(), [](reference& v) { v += 1; });
+                 array_->end(), [](value_type& v) { v += 1; });
 
   res = shad::find_if(shad::distributed_parallel_tag{}, array_->begin(),
                       array_->end(),
@@ -109,8 +109,8 @@ TEST_F(AlgorithmsTest, for_each) {
 }
 
 TEST_F(AlgorithmsTest, all_of) {
-  using value_type = typename std::array<size_t, 10001>::value_type;
-  using reference = typename std::array<size_t, 10001>::reference;
+  using value_type = typename shad::array<size_t, 10001>::value_type;
+  using reference = typename shad::array<size_t, 10001>::reference;
 
   bool res = shad::all_of(shad::distributed_sequential_tag{}, array_->begin(),
                           array_->end(),
@@ -140,8 +140,8 @@ TEST_F(AlgorithmsTest, all_of) {
 }
 
 TEST_F(AlgorithmsTest, any_of) {
-  using value_type = typename std::array<size_t, 10001>::value_type;
-  using reference = typename std::array<size_t, 10001>::reference;
+  using value_type = typename shad::array<size_t, 10001>::value_type;
+  using reference = typename shad::array<size_t, 10001>::reference;
 
   bool res = shad::any_of(shad::distributed_sequential_tag{}, array_->begin(),
                           array_->end(),
@@ -171,8 +171,8 @@ TEST_F(AlgorithmsTest, any_of) {
 }
 
 TEST_F(AlgorithmsTest, none_of) {
-  using value_type = typename std::array<size_t, 10001>::value_type;
-  using reference = typename std::array<size_t, 10001>::reference;
+  using value_type = typename shad::array<size_t, 10001>::value_type;
+  using reference = typename shad::array<size_t, 10001>::reference;
 
   bool res = shad::none_of(shad::distributed_sequential_tag{}, array_->begin(),
                            array_->end(),
@@ -202,8 +202,8 @@ TEST_F(AlgorithmsTest, none_of) {
 }
 
 TEST_F(AlgorithmsTest, count) {
-  using value_type = typename std::array<size_t, 10001>::value_type;
-  using reference = typename std::array<size_t, 10001>::reference;
+  using value_type = typename shad::array<size_t, 10001>::value_type;
+  using reference = typename shad::array<size_t, 10001>::reference;
 
   auto res = shad::count(shad::distributed_sequential_tag{}, array_->begin(),
                          array_->end(), value_type(1));
@@ -225,8 +225,8 @@ TEST_F(AlgorithmsTest, count) {
 }
 
 TEST_F(AlgorithmsTest, count_if) {
-  using value_type = typename std::array<size_t, 10001>::value_type;
-  using reference = typename std::array<size_t, 10001>::reference;
+  using value_type = typename shad::array<size_t, 10001>::value_type;
+  using reference = typename shad::array<size_t, 10001>::reference;
 
   auto res = shad::count_if(shad::distributed_sequential_tag{}, array_->begin(),
                             array_->end(),
