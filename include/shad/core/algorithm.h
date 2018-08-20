@@ -460,6 +460,14 @@ void for_each(ExecutionPolicy&& policy, ForwardItr first, ForwardItr last,
   impl::for_each(std::forward<ExecutionPolicy>(policy), first, last, p);
 }
 
+template <typename ExecutionPolicy, typename ForwardItr,
+          typename UnaryPredicate>
+void for_each_n(ExecutionPolicy&& policy, ForwardItr first, std::size_t n,
+                UnaryPredicate p) {
+  auto last = std::advance(first, n);
+  impl::for_each(std::forward<ExecutionPolicy>(policy), first, last, p);
+}
+
 namespace impl {
 
 template <typename InputItr, typename T>
