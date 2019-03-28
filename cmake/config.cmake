@@ -149,6 +149,14 @@ if (SHAD_ENABLE_DOXYGEN)
   endif()
 
   add_custom_target(doxygen ALL)
+
+  include(FindPythonModule)
+
+  find_package(PythonInterp REQUIRED)
+  find_package(Sphinx REQUIRED)
+  find_python_module(breathe REQUIRED)
+  find_python_module(exhale REQUIRED)
+  find_python_module(sphinx_rtd_theme REQUIRED)
 else()
   message(STATUS "Doxygen disabled.")
 endif()
