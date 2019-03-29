@@ -1,10 +1,9 @@
 SHAD
 ****
 
-.. image:: https://github.com/pnnl/SHAD/raw/master/docs/shad_logo.jpg
+.. image:: https://github.com/pnnl/SHAD/raw/master/docs/shad_logo_500.jpeg
     :target: https://pnnl.github.io/SHAD
     :align: center
-    :width: 500
 
 
 .. image:: https://travis-ci.org/pnnl/SHAD.svg?branch=master

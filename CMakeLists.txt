@@ -148,8 +148,6 @@ if (SHAD_ENABLE_PERFORMANCE_TEST)
 endif()
 if (SHAD_ENABLE_DOXYGEN)
   add_subdirectory(docs)
-  add_custom_target(sphinx_doc ALL
-    ${SPHINX_EXECUTABLE} -q -b html -c ${SHAD_MAIN_SRC_DIR}/docs ${SHAD_MAIN_SRC_DIR}/docs ${SHAD_BINARY_DIR}/sphinx_out)
 endif()
 add_subdirectory(examples)
 

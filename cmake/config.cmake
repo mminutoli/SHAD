@@ -148,7 +148,7 @@ if (SHAD_ENABLE_DOXYGEN)
     set(HAVE_DOT "" CACHE INTERNAL "Dot ?")
   endif()
 
-  add_custom_target(doxygen ALL)
+  add_custom_target(docs ALL)
 
   include(FindPythonModule)
 
