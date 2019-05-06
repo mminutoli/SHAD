@@ -5,9 +5,6 @@ SHAD
     :target: https://pnnl.github.io/SHAD
     :align: center
 
-::
-   
-
 .. image:: https://travis-ci.org/pnnl/SHAD.svg?branch=master
     :target: https://travis-ci.org/pnnl/SHAD
 .. image:: https://api.codacy.com/project/badge/Grade/d353a0bb182a47da80e5711c4e39ca0c
