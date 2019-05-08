@@ -22,8 +22,8 @@ matrix:
             - doxygen
           sources:
             - ubuntu-toolchain-r-test
-            - llvm-toolchain-trusty-6.0
-            - sourceline: 'deb http://apt.llvm.org/trusty/ llvm-toolchain-trusty-6.0 main'
+            - llvm-toolchain-xenial-6.0
+            - sourceline: 'deb http://apt.llvm.org/trusty/ llvm-toolchain-xenial-6.0 main'
               key_url: 'https://apt.llvm.org/llvm-snapshot.gpg.key'
 
 branches:
