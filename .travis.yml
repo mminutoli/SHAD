@@ -30,7 +30,7 @@ matrix:
               key_url: 'https://apt.llvm.org/llvm-snapshot.gpg.key'
 
     - env: C_COMPILER=clang-6.0 && CXX_COMPILER=clang++-6.0 DEPLOY_PAGES=1
-      addons: *clang50
+      addons: *clang60
 
 branches:
   except:
