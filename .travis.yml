@@ -79,7 +79,7 @@ script:
 # Generate documentation
 after_success:
   - test $DEPLOY_PAGES = 1 &&
-    pip install -r docs/requirements.txt &&
+    pip install --user -r docs/requirements.txt &&
     cd $TRAVIS_BUILD_DIR &&
     mkdir build-doxygen && cd build-doxygen && cmake .. -DSHAD_ENABLE_UNIT_TEST=OFF -DSHAD_ENABLE_DOXYGEN=ON &&
     make docs
