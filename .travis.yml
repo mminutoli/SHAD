@@ -53,7 +53,7 @@ matrix:
             - doxygen-gui
             - graphviz
       env:
-        - MATRIX_EVAL="CC=clang-7.0 && CXX=clang++-7.0"
+        - MATRIX_EVAL="CC=clang-7 && CXX=clang++-7"
           DEPLOY_PAGES=1
 
 branches:
