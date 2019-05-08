@@ -1,0 +1,39 @@
+
+.. _namespace_shad__impl__transform_impl:
+
+Namespace shad::impl::transform_impl
+====================================
+
+
+.. contents:: Contents
+   :local:
+   :backlinks: none
+
+
+
+
+
+Classes
+-------
+
+
+- :ref:`exhale_struct_structshad_1_1impl_1_1transform__impl_1_1gen__args__t`
+
+
+Functions
+---------
+
+
+- :ref:`exhale_function_modifyng__sequence__ops_8h_1ad6bdbfd78544099c4adfd0b08d277908`
+
+- :ref:`exhale_function_modifyng__sequence__ops_8h_1a2e1040751e46657b0e54728ff4ed5f31`
+
+- :ref:`exhale_function_modifyng__sequence__ops_8h_1a22ddc42262dbef0a684feed908a103f2`
+
+- :ref:`exhale_function_modifyng__sequence__ops_8h_1a396bc3573d54e01b21bc6d8d40f7500f`
+
+- :ref:`exhale_function_modifyng__sequence__ops_8h_1a49aed1a2059e8e8e269a98a3ee9d0ffd`
+
+- :ref:`exhale_function_modifyng__sequence__ops_8h_1a66687c85f9356b01215c46410e13328e`
+
+- :ref:`exhale_function_modifyng__sequence__ops_8h_1a6e2c8bb693c6d6b9b11e186511c6d33b`

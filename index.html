@@ -1,0 +1,451 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>SHAD &mdash; SHAD  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript">
+          var DOCUMENTATION_OPTIONS = {
+              URL_ROOT:'./',
+              VERSION:'',
+              LANGUAGE:'en',
+              COLLAPSE_INDEX:false,
+              FILE_SUFFIX:'.html',
+              HAS_SOURCE:  true,
+              SOURCELINK_SUFFIX: '.txt'
+          };
+      </script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+        <script type="text/javascript" src="_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/collapsible-lists/css/tree_view.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Library API" href="api/library_root.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="#" class="icon icon-home"> SHAD
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="api/library_root.html">Library API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="license.html">Apache License</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="#">SHAD</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="#">Docs</a> &raquo;</li>
+        
+      <li>SHAD</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="shad">
+<h1>SHAD<a class="headerlink" href="#shad" title="Permalink to this headline">¶</a></h1>
+<a class="reference external image-reference" href="https://travis-ci.org/pnnl/SHAD"><img alt="https://travis-ci.org/pnnl/SHAD.svg?branch=master" src="https://travis-ci.org/pnnl/SHAD.svg?branch=master" /></a>
+<a class="reference external image-reference" href="https://www.codacy.com/app/mminutoli/SHAD?utm_source=github.com&amp;amp;utm_medium=referral&amp;amp;utm_content=pnnl/SHAD&amp;amp;utm_campaign=Badge_Grade"><img alt="https://api.codacy.com/project/badge/Grade/d353a0bb182a47da80e5711c4e39ca0c" src="https://api.codacy.com/project/badge/Grade/d353a0bb182a47da80e5711c4e39ca0c" /></a>
+<a class="reference external image-reference" href="https://raw.githubusercontent.com/pnnl/SHAD/master/LICENSE.md"><img alt="https://img.shields.io/badge/license-APACHE2-blue.svg" src="https://img.shields.io/badge/license-APACHE2-blue.svg" /></a>
+<a class="reference external image-reference" href="http://github.com/pnnl/SHAD/releases"><img alt="https://img.shields.io/github/tag/pnnl/SHAD.svg" src="https://img.shields.io/github/tag/pnnl/SHAD.svg" /></a>
+<a class="reference external image-reference" href="http://github.com/pnnl/SHAD/issues"><img alt="https://img.shields.io/github/issues/pnnl/SHAD.svg" src="https://img.shields.io/github/issues/pnnl/SHAD.svg" /></a>
+<a class="reference external image-reference" href="https://pnnl.github.io/SHAD"><img alt="https://github.com/pnnl/SHAD/raw/master/docs/shad_logo_500.jpeg" class="align-center" src="https://github.com/pnnl/SHAD/raw/master/docs/shad_logo_500.jpeg" /></a>
+<p>SHAD is the Scalable High-Performance Algorithms and Data-structures C++
+library. SHAD is designed as a software stack, composed of three main layers:</p>
+<ul class="simple">
+<li>Abstract Runtime Interface: SHAD adopts a shared-memory, task-based,
+programming model, whose main tasking primitives are definide in its runtime
+abstraction layer; this component represents an interface to underlying
+runtime systems, which implement tasking and threading; for portability,
+SHAD can interface with multiple <a class="reference internal" href="#runtime-systems">Runtime Systems</a>.</li>
+<li>General Purpose Data-structures: SHAD data-structures offer a shared-memory
+abstraction, and provide APIs for parallel access and update; data-structures
+include arrays, vectors, maps and sets.</li>
+<li>Extensions: SHAD extensions are custom libraries built using the underlying
+SHAD components, and/or other extensions; SHAD currently include graph
+data-structures and algorithms.</li>
+</ul>
+<p>SHAD is written in C++, and requires compiler support for (at least) C++ 11.  To
+enable all of the SHAD’s features, please review its <a class="reference internal" href="#install-dependencies">Install Dependencies</a> and
+<a class="reference internal" href="#runtime-systems">Runtime Systems</a> requirements.</p>
+<div class="section" id="how-to-cite-shad">
+<h2>How to cite SHAD<a class="headerlink" href="#how-to-cite-shad" title="Permalink to this headline">¶</a></h2>
+<p>In publications SHAD can be cited as <a class="reference internal" href="#id2" id="id1">[SHAD]</a>.</p>
+<table class="docutils citation" frame="void" id="id2" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[SHAD]</a></td><td>V. G. Castellana and M. Minutoli, “SHAD: The Scalable High-Performance
+Algorithms and Data-Structures Library,” 18th IEEE/ACM International
+Symposium on Cluster, Cloud and Grid Computing (CCGRID), Washington,
+DC, USA, 2018.</td></tr>
+</tbody>
+</table>
+<a class="reference external image-reference" href="https://doi.org/10.1109/CCGRID.2018.00071"><img alt="https://img.shields.io/badge/DOI-https%3A%2F%2Fdoi.org%2F10.1109%2FCCGRID.2018.00071-blue.svg" src="https://img.shields.io/badge/DOI-https%3A%2F%2Fdoi.org%2F10.1109%2FCCGRID.2018.00071-blue.svg" /></a>
+<a class="reference external image-reference" href="https://dblp.org/rec/bibtex/conf/ccgrid/CastellanaM18"><img alt="https://img.shields.io/badge/BibTex-view-blue.svg" src="https://img.shields.io/badge/BibTex-view-blue.svg" /></a>
+<a class="reference external image-reference" href="https://dblp.org/rec/bib2/conf/ccgrid/CastellanaM18.bib"><img alt="https://img.shields.io/badge/BibTex-download-blue.svg" src="https://img.shields.io/badge/BibTex-download-blue.svg" /></a>
+<a class="reference external image-reference" href="https://dblp.org/rec/ris/conf/ccgrid/CastellanaM18.ris"><img alt="https://img.shields.io/badge/RIS-download-blue.svg" src="https://img.shields.io/badge/RIS-download-blue.svg" /></a>
+</div>
+<div class="section" id="quickstart-with-docker">
+<h2>Quickstart with Docker<a class="headerlink" href="#quickstart-with-docker" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ git clone https://github.com/pnnl/SHAD.git shad
+$ <span class="nb">cd</span> shad
+$ docker-compose -f docker/docker-compose.yml pull head worker
+$ docker-compose -f docker/docker-compose.yml up -d scale <span class="nv">worker</span><span class="o">=</span><span class="m">2</span>
+$ docker <span class="nb">exec</span> -u mpi -it dokcer_head_1 /bin/bash
+$ <span class="nb">cd</span> <span class="nv">$HOME</span>/shad
+$ mkdir build <span class="o">&amp;&amp;</span> <span class="nb">cd</span> build
+$ cmake .. -DCMAKE_BUILD_TYPE<span class="o">=</span>Release -DSHAD_RUNTIME_SYSTEM<span class="o">=</span>GMT
+$ make
+</pre></div>
+</div>
+<p>To run the unit test of the array on the docker cluster:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ mpiexec -np <span class="m">2</span> -ppn <span class="m">1</span> --hosts docker_worker_1,docker_worker_2 <span class="se">\</span>
+    test/unit_tests/core/shad_array_test
+</pre></div>
+</div>
+</div>
+<div class="section" id="build-instructions">
+<h2>Build Instructions<a class="headerlink" href="#build-instructions" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="install-dependencies">
+<h3>Install Dependencies<a class="headerlink" href="#install-dependencies" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="gperftools">
+<h4>GPerftools<a class="headerlink" href="#gperftools" title="Permalink to this headline">¶</a></h4>
+<p>GPerftools is an optional dependency.  Of the whole GPerftools framework, SHAD
+currently uses only tcmalloc when available.  We have seen significant
+performance improvement in using tcmalloc over the standard allocator.
+Therefore, we recommend its use.  In the case it is not available through your
+package manager, you can follow the following basic instruction to build and
+install GPerftools.  Please refer to the project page to have more detailed
+information.</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ git clone https://github.com/gperftools/gperftools.git
+$ <span class="nb">cd</span> gperftools
+$ ./autogen.sh
+$ mkdir build <span class="o">&amp;&amp;</span> <span class="nb">cd</span> build
+$ ../configure --prefix<span class="o">=</span><span class="nv">$GPERFTOOLSROOT</span>
+$ make <span class="o">&amp;&amp;</span> make install
+</pre></div>
+</div>
+<p>where <code class="docutils literal notranslate"><span class="pre">$GPERFTOOLSROOT</span></code> is the directory where you want the library to be
+installed.</p>
+</div>
+<div class="section" id="gtest">
+<h4>GTest<a class="headerlink" href="#gtest" title="Permalink to this headline">¶</a></h4>
+<p>The Google Test framework is only required if you want to run the unit tests.
+On some system, GTest is not available through the package manager.  In those
+cases you can install it following these instructions:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ git clone https://github.com/google/googletest.git
+$ <span class="nb">cd</span> googletest
+$ mkdir build <span class="o">&amp;&amp;</span> <span class="nb">cd</span> build <span class="o">&amp;&amp;</span> cmake .. -DCMAKE_INSTALL_PREFIX<span class="o">=</span><span class="nv">$GTESTROOT</span>
+$ make <span class="o">&amp;&amp;</span> make install
+</pre></div>
+</div>
+<p>where <code class="docutils literal notranslate"><span class="pre">$GTESTROOT</span></code> is the directory where you want the library to be
+installed.</p>
+</div>
+<div class="section" id="runtime-systems">
+<h4>Runtime Systems<a class="headerlink" href="#runtime-systems" title="Permalink to this headline">¶</a></h4>
+<p>To fully exploit its features, SHAD requires a supported runtime system or
+threading library to be installed. SHAD currently supports:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://github.com/pnnl/gmt">Global Memory and Threading Runtime System (GMT),</a></li>
+<li><a class="reference external" href="https://www.threadingbuildingblocks.org/">Intel Threading Building Blocks (TBB),</a></li>
+</ul>
+<p>If such software is not available on the system, SHAD can be compiled and used
+with its default (single-threaded) C++ backend.</p>
+<div class="section" id="gmt">
+<h5>GMT<a class="headerlink" href="#gmt" title="Permalink to this headline">¶</a></h5>
+<p>SHAD uses the Global Memory and Threading (GMT) Runtime System as backend for
+commodity clusters.  GMT requires a Linux OS, C compiler and MPI. It can be
+installed using the following commands:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ git clone https://github.com/pnnl/gmt.git
+$ <span class="nb">cd</span> gmt
+$ mkdir build <span class="o">&amp;&amp;</span> <span class="nb">cd</span> build
+$ cmake .. -DCMAKE_INSTALL_PREFIX<span class="o">=</span><span class="nv">$GMT_ROOT</span> <span class="se">\</span>
+    -DCMAKE_BUILD_TYPE<span class="o">=</span>Release
+$ make -j &lt;SOMETHING_REASONABLE&gt; <span class="o">&amp;&amp;</span> make install
+</pre></div>
+</div>
+<p>where <code class="docutils literal notranslate"><span class="pre">$GMT_ROOT</span></code> is the directory where you want the library to be installed.</p>
+</div>
+</div>
+</div>
+<div class="section" id="build-shad">
+<h3>Build SHAD<a class="headerlink" href="#build-shad" title="Permalink to this headline">¶</a></h3>
+<p>Before attempting to build SHAD, please take a look at the requirements in
+<a class="reference internal" href="#install-dependencies">Install Dependencies</a>.  In case gtest is not available, compilation of unit
+tests may be disabled setting <code class="docutils literal notranslate"><span class="pre">SHAD_ENABLE_UNIT_TEST</span></code> to off.  Currently SHAD
+has full support for TBB and GMT <a class="reference internal" href="#runtime-systems">Runtime Systems</a>.  Future releases will
+provide additional backends. Target runtime systems may be specified via the
+<code class="docutils literal notranslate"><span class="pre">SHAD_RUNTIME_SYSTEM</span></code> option: valid values for this option are <code class="docutils literal notranslate"><span class="pre">GMT</span></code>,
+<code class="docutils literal notranslate"><span class="pre">TBB</span></code>, and, <code class="docutils literal notranslate"><span class="pre">CPP_SIMPLE</span></code>.</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ git clone &lt;url-to-SHAD-repo&gt;  <span class="c1"># or untar the SHAD source code.</span>
+$ <span class="nb">cd</span> shad
+$ mkdir build <span class="o">&amp;&amp;</span> <span class="nb">cd</span> build
+$ cmake .. -DCMAKE_INSTALL_PREFIX<span class="o">=</span><span class="nv">$SHADROOT</span>        <span class="se">\</span>
+    -DCMAKE_BUILD_TYPE<span class="o">=</span>Release                     <span class="se">\</span>
+    -DSHAD_RUNTIME_SYSTEM<span class="o">=</span>&lt;SupportedRuntimeSystem&gt; <span class="se">\</span>
+    <span class="c1"># if using TBB                                 \</span>
+    -DTBB_ROOT<span class="o">=</span><span class="nv">$TBBROOT</span>                            <span class="se">\</span>
+    <span class="c1"># else if using GMT                            \</span>
+    -DGMT_ROOT<span class="o">=</span><span class="nv">$GMTROOT</span>                            <span class="se">\</span>
+    <span class="c1"># endif                                        \</span>
+    -DGTEST_ROOT<span class="o">=</span><span class="nv">$GTESTROOT</span>                        <span class="se">\</span>
+    -DGPERFTOOLS_ROOT<span class="o">=</span><span class="nv">$GPERFTOOLSROOT</span>
+$ make -j &lt;SOMETHING_REASONABLE&gt; <span class="o">&amp;&amp;</span> make install
+</pre></div>
+</div>
+<p>If you have multiple compilers (or compiler versions) available on your system,
+you may want to indicate a specific one using the
+<code class="docutils literal notranslate"><span class="pre">-DCMAKE_CXX_COMPILER=&lt;compiler&gt;</span></code> option.</p>
+<div class="section" id="build-the-documentation">
+<h4>Build the Documentation<a class="headerlink" href="#build-the-documentation" title="Permalink to this headline">¶</a></h4>
+<p>SHAD’s documentation is entirely written using <a class="reference external" href="http://www.doxygen.org">Doxygen</a>.  You can obtain a copy
+of Doxygen through your package manager or following the installation
+instructions from their website.  To build SHAD’s documentation, you need to:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>$ <span class="nb">cd</span> shad/build  <span class="c1"># cd into your build directory.</span>
+$ cmake .. -DSHAD_ENABLE_DOXYGEN<span class="o">=</span><span class="m">1</span>
+$ make doxygen
+</pre></div>
+</div>
+<p>Once the documentation is build, you can open with your favorite web browser the
+first page with:</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>open docs/doxygen/html/index.html  <span class="c1"># From your build directory</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="shad-team">
+<h2>SHAD Team<a class="headerlink" href="#shad-team" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference external" href="mailto:vitogiovanni&#46;castellana&#37;&#52;&#48;pnnl&#46;gov">Vito Giovanni Castellana</a></li>
+<li><a class="reference external" href="mailto:marco&#46;minutoli&#37;&#52;&#48;pnnl&#46;gov">Marco Minutoli</a></li>
+<li><a class="reference external" href="mailto:maurizio&#46;drocco&#37;&#52;&#48;pnnl&#46;gov">Maurizio Drocco</a></li>
+</ul>
+</div>
+<div class="section" id="disclamer-notice">
+<h2>Disclamer Notice<a class="headerlink" href="#disclamer-notice" title="Permalink to this headline">¶</a></h2>
+<p>This material was prepared as an account of work sponsored by an agency of the
+United States Government.  Neither the United States Government nor the United
+States Department of Energy, nor Battelle, nor any of their employees, nor any
+jurisdiction or organization that has cooperated in the development of these
+materials, makes any warranty, express or implied, or assumes any legal
+liability or responsibility for the accuracy, completeness, or usefulness or any
+information, apparatus, product, software, or process disclosed, or represents
+that its use would not infringe privately owned rights.</p>
+<p>Reference herein to any specific commercial product, process, or service by
+trade name, trademark, manufacturer, or otherwise does not necessarily
+constitute or imply its endorsement, recommendation, or favoring by the United
+States Government or any agency thereof, or Battelle Memorial Institute. The
+views and opinions of authors expressed herein do not necessarily state or
+reflect those of the United States Government or any agency thereof.</p>
+<div align=center>
+<pre style="align-text:center">
+PACIFIC NORTHWEST NATIONAL LABORATORY
+operated by
+BATTELLE
+for the
+UNITED STATES DEPARTMENT OF ENERGY
+under Contract DE-AC05-76RL01830
+</pre>
+</div></div>
+<div class="section" id="content">
+<h2>Content<a class="headerlink" href="#content" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api/library_root.html">Library API</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/library_root.html#class-hierarchy">Class Hierarchy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/library_root.html#file-hierarchy">File Hierarchy</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/library_root.html#full-api">Full API</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="license.html">Apache License</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="license.html#definitions">1. Definitions.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="license.html#grant-of-copyright-license">2. Grant of Copyright License.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="license.html#grant-of-patent-license">3. Grant of Patent License.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="license.html#redistribution">4. Redistribution.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="license.html#submission-of-contributions">5. Submission of Contributions.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="license.html#trademarks">6. Trademarks.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="license.html#disclaimer-of-warranty">7. Disclaimer of Warranty.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="license.html#limitation-of-liability">8. Limitation of Liability.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="license.html#accepting-warranty-or-additional-liability">9. Accepting Warranty or Additional Liability.</a></li>
+<li class="toctree-l2"><a class="reference internal" href="license.html#appendix-how-to-apply-the-apache-license-to-your-work">APPENDIX: How to apply the Apache License to your work.</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="indices-and-tables">
+<h2>Indices and Tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></li>
+<li><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></li>
+</ul>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="api/library_root.html" class="btn btn-neutral float-right" title="Library API" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Battelle Memorial Institute
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

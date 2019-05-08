@@ -1,0 +1,13 @@
+.. _exhale_function_modifyng__sequence__ops_8h_1ad6bdbfd78544099c4adfd0b08d277908:
+
+Template Function shad::impl::transform_impl::block_contiguous_kernel
+=====================================================================
+
+- Defined in :ref:`file_include_shad_core_impl_modifyng_sequence_ops.h`
+
+
+Function Documentation
+----------------------
+
+
+.. doxygenfunction:: shad::impl::transform_impl::block_contiguous_kernel(rt::Locality, ForwardIt1, ForwardIt1, ForwardIt2, UnaryOperation)
