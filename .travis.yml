@@ -13,24 +13,18 @@ matrix:
 
     # Clang on Linux
     - os: linux
+      env: C_COMPILER=clang-6.0 && CXX_COMPILER=clang++-6.0 DEPLOY_PAGES=1
       addons: &clang60
         apt:
           packages:
             - clang-6.0
             - g++-7
             - doxygen
-            - doxygen-doc
-            - doxygen-latex
-            - doxygen-gui
-            - graphviz
           sources:
             - ubuntu-toolchain-r-test
             - llvm-toolchain-trusty-6.0
             - sourceline: 'deb http://apt.llvm.org/trusty/ llvm-toolchain-trusty-6.0 main'
               key_url: 'https://apt.llvm.org/llvm-snapshot.gpg.key'
-
-    - env: C_COMPILER=clang-6.0 && CXX_COMPILER=clang++-6.0 DEPLOY_PAGES=1
-      addons: *clang60
 
 branches:
   except:
