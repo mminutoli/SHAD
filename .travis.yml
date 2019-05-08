@@ -18,7 +18,7 @@ matrix:
 
     # Clang on Linux
     - os: linux
-      env: C_COMPILER=clang-5.0 && CXX_COMPILER=clang++-5.0 DEPLOY_PAGES=1
+      env: C_COMPILER=clang-5.0 && CXX_COMPILER=clang++-5.0 DEPLOY_PAGES=0
       addons: &clang50
         apt:
           packages:
